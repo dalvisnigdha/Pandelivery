@@ -4,13 +4,153 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    tools:context=".RegisterActivity"
+    tools:ignore="ExtraText">
+    app:passwordToggleEnabled="true"
+
+
+    <EditText
+        android:id="@+id/fullname"
+        android:layout_width="329dp"
+        android:layout_height="52dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="36dp"
+        android:ems="10"
+        android:hint="Full Name"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registernw" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="104dp"
-        android:layout_height="31dp"
-        android:text="REGISTER PAGE"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="187dp" />
+        android:id="@+id/registernw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Register"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/regemail"
+        android:layout_width="329dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="email id"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/fullname"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/fullname"
+        app:layout_constraintTop_toBottomOf="@+id/fullname" />
+
+    <EditText
+        android:id="@+id/contact"
+        android:layout_width="328dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="Contact  Number"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/regemail"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/regemail"
+        app:layout_constraintTop_toBottomOf="@+id/regemail" />
+
+    <TextView
+        android:id="@+id/fullnametxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your full name"
+        app:layout_constraintBottom_toTopOf="@+id/fullname"
+        app:layout_constraintStart_toStartOf="@+id/fullname" />
+
+    <TextView
+        android:id="@+id/emailidtxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your email id"
+        app:layout_constraintBottom_toTopOf="@+id/regemail"
+        app:layout_constraintStart_toStartOf="@+id/regemail" />
+
+    <TextView
+        android:id="@+id/contactnumnertxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact Number"
+        app:layout_constraintBottom_toTopOf="@+id/contact"
+        app:layout_constraintStart_toStartOf="@+id/contact" />
+
+    <EditText
+        android:id="@+id/pwd"
+        android:layout_width="329dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/contact"
+        app:layout_constraintStart_toStartOf="@+id/contact"
+        app:layout_constraintTop_toBottomOf="@+id/contact" />
+
+    <TextView
+        android:id="@+id/pwdtxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password (8 or more characters) "
+        app:layout_constraintBottom_toTopOf="@+id/pwd"
+        app:layout_constraintStart_toStartOf="@+id/pwd" />
+
+    <RadioGroup
+        android:id="@+id/usertypereg"
+        android:layout_width="214dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal"
+        android:text="usertypereg"
+        app:layout_constraintStart_toStartOf="@+id/pwd"
+        app:layout_constraintTop_toBottomOf="@+id/pwd">
+
+        <RadioButton
+            android:id="@+id/ADMINreg"
+            android:layout_width="89dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="ADMIN"
+            app:layout_constraintStart_toStartOf="@+id/usertypereg"
+            app:layout_constraintTop_toBottomOf="@+id/usertypereg" />
+
+        <RadioButton
+            android:id="@+id/USERreg"
+            android:layout_width="88dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:text="USER"
+            app:layout_constraintStart_toEndOf="@+id/ADMINreg"
+            app:layout_constraintTop_toBottomOf="@+id/usertypereg" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/usertypetxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Type"
+        app:layout_constraintBottom_toTopOf="@+id/usertypereg"
+        app:layout_constraintStart_toStartOf="@+id/pwd" />
+
+    <Button
+        android:id="@+id/registernow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="136dp"
+        android:text="Register Now"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
