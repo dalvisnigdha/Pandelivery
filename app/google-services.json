@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "704525589672",
+    "firebase_url": "https://pendelivery.firebaseio.com",
+    "project_id": "pendelivery",
+    "storage_bucket": "pendelivery.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704525589672:android:a037b399e895af61e3b69d",
+        "android_client_info": {
+          "package_name": "com.example.pandelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704525589672-tg9bag5tmlfb3imsfll0braung16j55t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB36EJtyicIPhIamgNZXaGAtO-C2LYC7H8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704525589672-tg9bag5tmlfb3imsfll0braung16j55t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

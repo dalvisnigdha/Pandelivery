@@ -13,4 +13,10 @@
         android:text="USER PAGE AFTER LOGIN"
         tools:layout_editor_absoluteX="91dp"
         tools:layout_editor_absoluteY="168dp" />
+
+    <Button
+        android:id="@+id/signout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Out" />
 </androidx.constraintlayout.widget.ConstraintLayout>
