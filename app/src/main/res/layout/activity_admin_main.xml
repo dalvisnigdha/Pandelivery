@@ -4,13 +4,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminMainActivity">
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="188dp"
-        android:layout_height="108dp"
-        android:text="ADMIN PAGE AFTER LOGIN"
-        tools:layout_editor_absoluteX="85dp"
-        tools:layout_editor_absoluteY="188dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    tools:context=".AdminMainActivity"/>

@@ -11,8 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="ExtraText">
-        <activity android:name=".RegisterActivity"
-            android:parentActivityName = ".MainActivity"> </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".AdminMainActivity" />
         <activity android:name=".UserMainActivity" />
         <activity android:name=".MainActivity">
