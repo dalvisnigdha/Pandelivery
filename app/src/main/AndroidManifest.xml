@@ -11,11 +11,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="ExtraText">
+        <activity android:name=".AdminStopsActivity"
+            android:parentActivityName=".AdminMainActivity"/>
         <activity
             android:name=".RegisterActivity"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".AdminMainActivity" />
-        <activity android:name=".UserMainActivity" />
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".AdminMainActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".UserMainActivity"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
