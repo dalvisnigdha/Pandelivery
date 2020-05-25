@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     public EditText inp_user, inp_password;
     Button b_login;
     TextView b_register;
+    private RadioGroup radioGroup;
+    private RadioButton radioButton;
     FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
 
@@ -35,15 +38,27 @@ public class MainActivity extends AppCompatActivity {
         inp_password = findViewById(R.id.password);
         b_login = findViewById(R.id.submit);
         b_register = findViewById(R.id.register);
+        radioGroup = findViewById(R.id.usertype);
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Toast.makeText(MainActivity.this, "User logged in ", Toast.LENGTH_SHORT).show();
-                    Intent I = new Intent(MainActivity.this, UserMainActivity.class);
-                    startActivity(I);
+                    String displayName = user.getDisplayName();
+                    String[] parts = displayName.split("|");
+                    String user_type = parts[0];
+                    if ((user_type.equals("Admin")) && (radioGroup.getCheckedRadioButtonId() == R.id.ADMIN)){
+                        Toast.makeText(MainActivity.this, "Admin logged in ", Toast.LENGTH_SHORT).show();
+                        Intent I = new Intent(MainActivity.this, AdminMainActivity.class);
+                        startActivity(I);
+                    }else if ((user_type.equals("User")) && (radioGroup.getCheckedRadioButtonId() == R.id.USER)){
+                        Toast.makeText(MainActivity.this, "User logged in ", Toast.LENGTH_SHORT).show();
+                        Intent I = new Intent(MainActivity.this, UserMainActivity.class);
+                        startActivity(I);
+                    }else{
+                        Toast.makeText(MainActivity.this, "Select Correct User Type and Try Again.", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(MainActivity.this, "Login to continue", Toast.LENGTH_SHORT).show();
                 }
@@ -52,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         b_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent I = new Intent(MainActivity.this, MainActivity.class);
+                Intent I = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(I);
             }
         });
