@@ -2,6 +2,7 @@ package com.example.pandelivery;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,25 +44,7 @@ public class MainActivity extends AppCompatActivity {
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    String displayName = user.getDisplayName();
-                    String[] parts = displayName.split("|");
-                    String user_type = parts[0];
-                    if ((user_type.equals("Admin")) && (radioGroup.getCheckedRadioButtonId() == R.id.ADMIN)){
-                        Toast.makeText(MainActivity.this, "Admin logged in ", Toast.LENGTH_SHORT).show();
-                        Intent I = new Intent(MainActivity.this, AdminMainActivity.class);
-                        startActivity(I);
-                    }else if ((user_type.equals("User")) && (radioGroup.getCheckedRadioButtonId() == R.id.USER)){
-                        Toast.makeText(MainActivity.this, "User logged in ", Toast.LENGTH_SHORT).show();
-                        Intent I = new Intent(MainActivity.this, UserMainActivity.class);
-                        startActivity(I);
-                    }else{
-                        Toast.makeText(MainActivity.this, "Select Correct User Type and Try Again.", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(MainActivity.this, "Login to continue", Toast.LENGTH_SHORT).show();
-                }
+                checkLogin();
             }
         };
         b_register.setOnClickListener(new View.OnClickListener() {
@@ -90,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task task) {
                             if (!task.isSuccessful()) {
                                 Toast.makeText(MainActivity.this, "Not sucessfull", Toast.LENGTH_SHORT).show();
-                            } else {
-                                startActivity(new Intent(MainActivity.this, UserMainActivity.class));
                             }
                         }
                     });
@@ -107,6 +88,57 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        firebaseAuth.removeAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseAuth.removeAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        firebaseAuth.removeAuthStateListener(authStateListener);
+    }
+
+    public void checkLogin(){
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user != null) {
+            String displayName = user.getDisplayName();
+            if (displayName == null){
+                Toast.makeText(MainActivity.this, "Corrupted User", Toast.LENGTH_SHORT).show();
+                firebaseAuth.signOut();
+                return;
+            }
+            String[] parts = displayName.split(",");
+            String user_type = parts[0];
+            if ((user_type.equals("Admin")) && (radioGroup.getCheckedRadioButtonId() == R.id.ADMIN)){
+                Toast.makeText(MainActivity.this, "Admin logged in ", Toast.LENGTH_SHORT).show();
+                Intent I = new Intent(MainActivity.this, AdminMainActivity.class);
+                startActivity(I);
+            }else if ((user_type.equals("User")) && (radioGroup.getCheckedRadioButtonId() == R.id.USER)){
+                Toast.makeText(MainActivity.this, "User logged in ", Toast.LENGTH_SHORT).show();
+                Intent I = new Intent(MainActivity.this, UserMainActivity.class);
+                startActivity(I);
+            }else{
+                Toast.makeText(MainActivity.this, "Select Correct User Type and Try Again.", Toast.LENGTH_LONG).show();
+                Log.d("Firebase:", "User Type should be " + parts[0]);
+                firebaseAuth.signOut();
+            }
+        }
     }
 }
 
