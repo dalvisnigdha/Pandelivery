@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/admintag" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/inp_wh"
         android:layout_width="357dp"
         android:layout_height="46dp"
         android:layout_marginTop="28dp"
@@ -67,16 +67,16 @@
         app:layout_constraintTop_toBottomOf="@+id/whaddpage" />
 
     <EditText
-        android:id="@+id/whcapacity"
+        android:id="@+id/inp_whcap"
         android:layout_width="358dp"
         android:layout_height="45dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Enter capacity"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/editText"
-        app:layout_constraintStart_toStartOf="@+id/editText"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintEnd_toEndOf="@+id/inp_wh"
+        app:layout_constraintStart_toStartOf="@+id/inp_wh"
+        app:layout_constraintTop_toBottomOf="@+id/inp_wh" />
 
     <TextView
         android:id="@+id/listviewwh"
@@ -95,13 +95,13 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/deletewh"
         app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button2" />
+        app:layout_constraintTop_toTopOf="@+id/deletewh" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/deletewh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="84dp"
@@ -110,7 +110,7 @@
         android:text="Delete"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/whcapacity" />
+        app:layout_constraintTop_toBottomOf="@+id/inp_whcap" />
 
     <Button
         android:id="@+id/addstops"
