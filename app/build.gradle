@@ -49,4 +49,5 @@ dependencies {
 
     //Firebase Cloud Firestore
     implementation 'com.google.firebase:firebase-firestore:21.4.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
