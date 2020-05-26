@@ -15,10 +15,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     // Defining Variables
@@ -30,6 +37,11 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
 
+    private static final String TAG = "MainActivity";
+
+    // Access a Cloud Firestore instance from your Activity
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         b_login = findViewById(R.id.submit);
         b_register = findViewById(R.id.register);
         radioGroup = findViewById(R.id.usertype);
+        
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -72,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (!task.isSuccessful()) {
-                                Toast.makeText(MainActivity.this, "Not sucessfull", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Not successfull", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -82,6 +95,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void addItem(){
+        // Create a new user with a first, middle, and last name
+        Map<String, Object> user = new HashMap<>();
+        user.put("first", "Alan");
+        user.put("middle", "Mathison");
+        user.put("last", "Turing");
+        user.put("born", 1912);
+
+        // Add a new document with a generated ID
+        db.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 
     @Override
