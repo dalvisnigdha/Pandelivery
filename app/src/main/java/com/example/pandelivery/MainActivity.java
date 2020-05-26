@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     // Defining Variables
     public EditText inp_user, inp_password;
     Button b_login;
+    CheckBox pwdshow;
     TextView b_register;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         b_login = findViewById(R.id.submit);
         b_register = findViewById(R.id.register);
         radioGroup = findViewById(R.id.usertype);
+        pwdshow = findViewById(R.id.pwdshow);
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -47,11 +50,21 @@ public class MainActivity extends AppCompatActivity {
                 checkLogin();
             }
         };
+
+
         b_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent I = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(I);
+            }
+        });
+        pwdshow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                String displaypwd = inp_password.getText().toString();
+//                inp_password.setText(displaypwd);
             }
         });
         b_login.setOnClickListener(new View.OnClickListener() {
