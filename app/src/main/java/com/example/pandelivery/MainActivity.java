@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     // Access a Cloud Firestore instance from your Activity
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         b_login = findViewById(R.id.submit);
         b_register = findViewById(R.id.register);
         radioGroup = findViewById(R.id.usertype);
-        
+
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
