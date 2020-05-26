@@ -58,36 +58,34 @@
 
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/pwdshow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="Remember me"
+        android:layout_marginTop="12dp"
+        android:text="Show password"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/usertype"
-        app:layout_constraintTop_toBottomOf="@+id/usertype" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <TextView
         android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:text="Register"
         android:textColor="#0494A6"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/checkBox"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox" />
-
+        app:layout_constraintStart_toStartOf="@+id/pwdshow"
+        app:layout_constraintTop_toBottomOf="@+id/usertype" />
 
     <Button
         android:id="@+id/submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="16dp"
         android:text="Submit"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register" />
 
@@ -95,11 +93,11 @@
         android:id="@+id/usertype"
         android:layout_width="214dp"
         android:layout_height="43dp"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
         android:text="usertype"
-        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/password">
+        app:layout_constraintTop_toBottomOf="@+id/pwdshow">
 
         <RadioButton
             android:id="@+id/ADMIN"
@@ -120,5 +118,15 @@
             app:layout_constraintStart_toEndOf="@+id/ADMIN"
             app:layout_constraintTop_toBottomOf="@+id/usertype" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/forgotpwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot Password ?"
+        android:textColor="#2196F3"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
