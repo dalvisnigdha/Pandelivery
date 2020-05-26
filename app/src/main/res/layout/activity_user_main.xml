@@ -7,16 +7,12 @@
     tools:context=".UserMainActivity">
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="119dp"
-        android:layout_height="77dp"
-        android:text="USER PAGE AFTER LOGIN"
-        tools:layout_editor_absoluteX="91dp"
-        tools:layout_editor_absoluteY="168dp" />
-
-    <Button
-        android:id="@+id/signout"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign Out" />
+        android:text="user"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

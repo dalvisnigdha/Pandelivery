@@ -26,7 +26,7 @@
         android:layout_marginLeft="84dp"
         android:layout_marginStart="84dp"
         android:text="Admin"
-        android:textColor="#1A2877"
+        android:textColor="#2196F3"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/signout" />
@@ -44,12 +44,12 @@
         android:id="@+id/whaddpage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="36dp"
         android:text="Warehouse"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintHorizontal_bias="0.082"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/admintag" />
 
@@ -62,6 +62,7 @@
         android:hint="Enter Warehouse Name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="@+id/listviewwh"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/whaddpage"
         app:layout_constraintTop_toBottomOf="@+id/whaddpage" />
 
@@ -113,8 +114,8 @@
 
     <Button
         android:id="@+id/addstops"
-        android:layout_width="123dp"
-        android:layout_height="47dp"
+        android:layout_width="159dp"
+        android:layout_height="52dp"
         android:layout_marginTop="16dp"
         android:text="Add stops"
         android:textSize="18sp"
