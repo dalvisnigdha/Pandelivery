@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     // Defining Variables
     public EditText inp_user, inp_password;
     Button b_login;
-    CheckBox pwdshow;
     TextView b_register;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
@@ -95,6 +94,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void addItem(){
+        // Create a new user with a first, middle, and last name
+        Map<String, Object> user = new HashMap<>();
+        user.put("first", "Alan");
+        user.put("middle", "Mathison");
+        user.put("last", "Turing");
+        user.put("born", 1912);
+
+        // Add a new document with a generated ID
+        db.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 
     @Override
