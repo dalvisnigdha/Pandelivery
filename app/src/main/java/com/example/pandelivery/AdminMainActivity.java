@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -81,12 +82,14 @@ public class AdminMainActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                Toast.makeText(AdminMainActivity.this, "Added Successfully", Toast.LENGTH_SHORT).show();// snigdha added
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.w(TAG, "Error adding document", e);
+                                Toast.makeText(AdminMainActivity.this, "Error adding document", Toast.LENGTH_SHORT).show();// snigdha added
                             }
                         });
                 inp_wh.setText("");
@@ -116,18 +119,21 @@ public class AdminMainActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
                                                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                        Toast.makeText(AdminMainActivity.this, "Deleted Successfully", Toast.LENGTH_SHORT).show(); // snigdha added
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
                                                         Log.w(TAG, "Error deleting document", e);
+                                                        Toast.makeText(AdminMainActivity.this, "Error Deleting (Not deleted)", Toast.LENGTH_SHORT).show();// snigdha added
                                                     }
                                                 });
                                         Log.d(TAG, document.getId() + " => " + document.getData());
                                     }
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
+                                    Toast.makeText(AdminMainActivity.this, "Error getting document", Toast.LENGTH_SHORT).show();// snigdha added
                                 }
                             }
                         });
