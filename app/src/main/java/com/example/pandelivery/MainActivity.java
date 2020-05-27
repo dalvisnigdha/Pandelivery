@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         b_register = findViewById(R.id.register);
         radioGroup = findViewById(R.id.usertype);
         View pwdshow = findViewById(R.id.pwdshow);
-        
+
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
