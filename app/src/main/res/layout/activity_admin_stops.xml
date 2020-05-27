@@ -5,5 +5,146 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AdminStopsActivity">
+    <Button
+        android:id="@+id/signout"
+        android:layout_width="106dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="28dp"
+        android:text="Sign Out"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.937"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/admintag"
+        android:layout_width="68dp"
+        android:layout_height="28dp"
+        android:layout_marginLeft="84dp"
+        android:layout_marginStart="84dp"
+        android:text="Admin"
+        android:textColor="#2196F3"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/signout" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="72dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/admin_image"
+        android:layout_width="48dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:src="@drawable/a"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintEnd_toStartOf="@+id/admintag" />
+
+    <TextView
+        android:id="@+id/stopsaddpage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Stops"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.082"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/admintag" />
+
+    <TextView
+        android:id="@+id/listviewstop"
+        android:layout_width="82dp"
+        android:layout_height="28dp"
+        android:text="List View"
+        android:textColor="#2196F3"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/stopsaddpage"
+        app:layout_constraintEnd_toEndOf="@+id/signout"
+        app:layout_constraintTop_toTopOf="@+id/stopsaddpage" />
+
+    <Spinner
+        android:id="@+id/spinnerwh"
+        android:layout_width="363dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/stopsaddpage"
+        app:layout_constraintTop_toBottomOf="@+id/stopsaddpage" />
+
+    <TextView
+        android:id="@+id/choosewhtag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose warehouse to add stops"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerwh"
+        app:layout_constraintStart_toStartOf="@+id/spinnerwh" />
+
+    <EditText
+        android:id="@+id/inp_stop"
+        android:layout_width="363dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Enter stop name"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/spinnerwh"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerwh" />
+
+    <EditText
+        android:id="@+id/inp_stopqty"
+        android:layout_width="362dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Enter quantity to be delivered"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/inp_stop"
+        app:layout_constraintTop_toBottomOf="@+id/inp_stop" />
+
+    <Button
+        android:id="@+id/savestop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/deletestop"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/deletestop" />
+
+    <Button
+        android:id="@+id/deletestop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="84dp"
+        android:layout_marginRight="84dp"
+        android:layout_marginTop="48dp"
+        android:text="Delete"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inp_stopqty" />
+
+    <Button
+        android:id="@+id/backtowh"
+        android:layout_width="159dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="16dp"
+        android:text="Back"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/savestop" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

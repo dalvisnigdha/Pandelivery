@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -15,10 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     // Defining Variables
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         b_login = findViewById(R.id.submit);
         b_register = findViewById(R.id.register);
         radioGroup = findViewById(R.id.usertype);
+        View pwdshow = findViewById(R.id.pwdshow);
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -47,11 +53,21 @@ public class MainActivity extends AppCompatActivity {
                 checkLogin();
             }
         };
+
+
         b_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent I = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(I);
+            }
+        });
+        pwdshow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                String displaypwd = inp_password.getText().toString();
+//                inp_password.setText(displaypwd);
             }
         });
         b_login.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +99,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+//    public void addItem(){
+//        // Create a new user with a first, middle, and last name
+//        Map<String, Object> user = new HashMap<>();
+//        user.put("first", "Alan");
+//        user.put("middle", "Mathison");
+//        user.put("last", "Turing");
+//        user.put("born", 1912);
+//
+//        // Add a new document with a generated ID
+//        db.collection("users")
+//                .add(user)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error adding document", e);
+//                    }
+//                });
+//    }
 
     @Override
     protected void onStart() {

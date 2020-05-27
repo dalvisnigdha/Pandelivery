@@ -3,4 +3,5 @@
     <item name="rdbAndroid" type="id" />
     <item name="rdbAngular" type="id" />
     <item name="getBtn" type="id" />
+    <item name="progressBar" type="id" />
 </resources>
