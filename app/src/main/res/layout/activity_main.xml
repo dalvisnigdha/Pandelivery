@@ -23,16 +23,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="359dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Enter password"
-        android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="@+id/email"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+    <TextView
+        android:id="@+id/signin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Sign In"
+        android:textColor="#0494A6"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/welcomeToPandelivery"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeToPandelivery" />
 
     <EditText
         android:id="@+id/email"
@@ -45,17 +45,48 @@
         app:layout_constraintStart_toStartOf="@+id/signin"
         app:layout_constraintTop_toBottomOf="@+id/signin" />
 
-    <TextView
-        android:id="@+id/signin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Sign In"
-        android:textColor="#0494A6"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/welcomeToPandelivery"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeToPandelivery" />
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="359dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Enter password"
+        android:inputType="textPassword"
+        app:passwordToggleEnabled="true"
+        app:layout_constraintStart_toStartOf="@+id/email"
+        app:layout_constraintTop_toBottomOf="@+id/email" />
 
+
+    <RadioGroup
+        android:id="@+id/usertype"
+        android:layout_width="214dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:text="usertype"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password">
+
+        <RadioButton
+            android:id="@+id/ADMIN"
+            android:layout_width="89dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="ADMIN"
+            app:layout_constraintStart_toStartOf="@+id/usertype"
+            app:layout_constraintTop_toBottomOf="@+id/usertype" />
+
+        <RadioButton
+            android:id="@+id/USER"
+            android:layout_width="88dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:text="USER"
+            app:layout_constraintStart_toEndOf="@+id/ADMIN"
+            app:layout_constraintTop_toBottomOf="@+id/usertype" />
+    </RadioGroup>
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -90,35 +121,5 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register" />
-
-    <RadioGroup
-        android:id="@+id/usertype"
-        android:layout_width="214dp"
-        android:layout_height="43dp"
-        android:orientation="horizontal"
-        android:text="usertype"
-        android:layout_marginTop="5dp"
-        app:layout_constraintStart_toStartOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/password">
-
-        <RadioButton
-            android:id="@+id/ADMIN"
-            android:layout_width="89dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="ADMIN"
-            app:layout_constraintStart_toStartOf="@+id/usertype"
-            app:layout_constraintTop_toBottomOf="@+id/usertype" />
-
-        <RadioButton
-            android:id="@+id/USER"
-            android:layout_width="88dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:text="USER"
-            app:layout_constraintStart_toEndOf="@+id/ADMIN"
-            app:layout_constraintTop_toBottomOf="@+id/usertype" />
-    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
