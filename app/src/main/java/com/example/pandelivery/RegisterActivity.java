@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
@@ -26,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText input_email;
     EditText input_phone;
     EditText input_pass;
+    CheckBox showPass;
     RadioGroup radioGroup;
     Button regsuccess;
     ProgressBar progressBar;
@@ -40,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
         input_email = findViewById(R.id.regemail);
         input_phone = findViewById(R.id.contact);
         input_pass = findViewById(R.id.pwd);
+        showPass = findViewById(R.id.showpwdreg);
         radioGroup = findViewById(R.id.usertypereg);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
@@ -57,6 +61,18 @@ public class RegisterActivity extends AppCompatActivity {
 
         });
 
+        showPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (showPass.isChecked()){
+                    input_pass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                }else{
+                    input_pass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+//                String displaypwd = inp_password.getText().toString();
+//                inp_password.setText(displaypwd);
+            }
+        });
     }
 
     private void registerUser(){
