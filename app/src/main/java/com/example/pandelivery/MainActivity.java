@@ -2,6 +2,7 @@ package com.example.pandelivery;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     public EditText inp_user, inp_password;
     Button b_login;
     TextView b_register;
+    TextView b_forgotPass;
+    CheckBox showPass;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     FirebaseAuth firebaseAuth;
@@ -54,8 +57,9 @@ public class MainActivity extends AppCompatActivity {
         inp_password = findViewById(R.id.password);
         b_login = findViewById(R.id.submit);
         b_register = findViewById(R.id.register);
+        b_forgotPass = findViewById(R.id.forgotpwd);
         radioGroup = findViewById(R.id.usertype);
-        View pwdshow = findViewById(R.id.pwdshow);
+        showPass = findViewById(R.id.pwdshow);
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -73,9 +77,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(I);
             }
         });
-        pwdshow.setOnClickListener(new View.OnClickListener() {
+        showPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (showPass.isChecked()){
+                    inp_password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                }else{
+                    inp_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
 //                String displaypwd = inp_password.getText().toString();
 //                inp_password.setText(displaypwd);
             }
@@ -107,6 +116,30 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        b_forgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userEmail = inp_user.getText().toString();
+                if (userEmail.isEmpty()) {
+                    inp_user.setError("Provide your Email first!");
+                    inp_user.requestFocus();
+                }
+                FirebaseAuth.getInstance().sendPasswordResetEmail(userEmail)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("Firebase", "Email sent.");
+                                    Toast.makeText(MainActivity.this, "Email Sent", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Log.d("Firebase", "Error! Try Later");
+                                    Toast.makeText(MainActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
+
 
     }
 
@@ -180,10 +213,12 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Admin logged in ", Toast.LENGTH_SHORT).show();
                 Intent I = new Intent(MainActivity.this, AdminMainActivity.class);
                 startActivity(I);
+                finish();
             }else if ((user_type.equals("User")) && (radioGroup.getCheckedRadioButtonId() == R.id.USER)){
                 Toast.makeText(MainActivity.this, "User logged in ", Toast.LENGTH_SHORT).show();
                 Intent I = new Intent(MainActivity.this, UserMainActivity.class);
                 startActivity(I);
+                finish();
             }else{
                 Toast.makeText(MainActivity.this, "Select Correct User Type and Try Again.", Toast.LENGTH_LONG).show();
                 Log.d("Firebase:", "User Type should be " + parts[0]);

@@ -80,8 +80,12 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                 });
 
 // in this block
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item, items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdown.setAdapter(adapter);
+     
+
+
         signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
