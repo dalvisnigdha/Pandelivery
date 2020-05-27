@@ -16,11 +16,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AdminMainActivity extends AppCompatActivity {
@@ -73,23 +75,26 @@ public class AdminMainActivity extends AppCompatActivity {
 //            Save the data in wh and whcap to the database
                 final String wh_int= inp_wh.getText().toString();
                 final String whcap_int = inp_whcap.getText().toString();
-                Map<String, Object> warehouse = new HashMap<>();
-                warehouse.put("warehouse", wh_int);
-                warehouse.put("warehouse_cap", whcap_int);
+
                 db.collection("warehouse")
-                        .add(warehouse)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        .whereEqualTo("warehouse", wh_int)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                Toast.makeText(AdminMainActivity.this, "Added Successfully", Toast.LENGTH_SHORT).show();// snigdha added
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                                Toast.makeText(AdminMainActivity.this, "Error adding document", Toast.LENGTH_SHORT).show();// snigdha added
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    QuerySnapshot query  = task.getResult();
+                                    if(query.isEmpty()){
+                                        Log.d(TAG, "Adding documents: ", task.getException());
+                                        addItem(wh_int,whcap_int);
+                                    }
+                                    else{
+                                        Log.d(TAG, "Updating documents: ", task.getException());
+                                        updateItem(wh_int,whcap_int,query.getDocuments());
+                                    }
+                                } else {
+                                    Log.d(TAG, "Error getting documents: ", task.getException());
+                                }
                             }
                         });
                 inp_wh.setText("");
@@ -101,7 +106,6 @@ public class AdminMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //            Delete the data in wh and whcap to the database
-
                 Log.d(TAG, "Deleting warehouse");
                 final String wh_int= inp_wh.getText().toString();
                 final String whcap_int = inp_whcap.getText().toString();
@@ -113,22 +117,7 @@ public class AdminMainActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        db.collection("warehouse").document(document.getId())
-                                                .delete()
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                                        Toast.makeText(AdminMainActivity.this, "Deleted Successfully", Toast.LENGTH_SHORT).show(); // snigdha added
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.w(TAG, "Error deleting document", e);
-                                                        Toast.makeText(AdminMainActivity.this, "Error Deleting (Not deleted)", Toast.LENGTH_SHORT).show();// snigdha added
-                                                    }
-                                                });
+                                        deleteItem(document);
                                         Log.d(TAG, document.getId() + " => " + document.getData());
                                     }
                                 } else {
@@ -141,5 +130,67 @@ public class AdminMainActivity extends AppCompatActivity {
                 inp_whcap.setText("");
             }
         });
+    }
+
+    public void addItem(String wname,String wcap){
+        Map<String, Object> warehouse = new HashMap<>();
+        warehouse.put("warehouse", wname);
+        warehouse.put("warehouse_cap", wcap);
+        db.collection("warehouse")
+                .add(warehouse)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        Toast.makeText(AdminMainActivity.this, "Added Successfully", Toast.LENGTH_SHORT).show();// snigdha added
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                        Toast.makeText(AdminMainActivity.this, "Error adding document", Toast.LENGTH_SHORT).show();// snigdha added
+                    }
+                });
+    }
+
+    public void updateItem(String wname, String wcap, List<DocumentSnapshot> docs){
+        for(DocumentSnapshot document : docs){
+            DocumentReference docRef = db.collection("warehouse").document(document.getId());
+            docRef.update("warehouse_cap", wcap)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+                            Toast.makeText(AdminMainActivity.this, "Added Successfully", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error updating document", e);
+                            Toast.makeText(AdminMainActivity.this, "Error adding document", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
+    public void deleteItem(QueryDocumentSnapshot document){
+        db.collection("warehouse").document(document.getId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        Toast.makeText(AdminMainActivity.this, "Deleted Successfully", Toast.LENGTH_SHORT).show(); // snigdha added
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                        Toast.makeText(AdminMainActivity.this, "Error Deleting (Not deleted)", Toast.LENGTH_SHORT).show();// snigdha added
+                    }
+                });
     }
 }
