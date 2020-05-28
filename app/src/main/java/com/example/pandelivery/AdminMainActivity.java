@@ -1,11 +1,13 @@
 package com.example.pandelivery;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,9 +26,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.view.Menu;
 
 public class AdminMainActivity extends AppCompatActivity {
-    Button signout;
+//    Button signout;
     Button addstops;
     EditText inp_wh;
     EditText inp_whcap;
@@ -42,7 +45,10 @@ public class AdminMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_main);
-        signout = findViewById(R.id.signout);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle("Admin");
+
+//        signout = findViewById(R.id.signout);
         addstops = findViewById(R.id.addstops);
         inp_wh = findViewById(R.id.inp_wh);
         inp_whcap = findViewById(R.id.inp_whcap);
@@ -52,14 +58,17 @@ public class AdminMainActivity extends AppCompatActivity {
         final String wh= inp_wh.getText().toString();
         final String whcap = inp_whcap.getText().toString();
 
-        signout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view){
-                Intent I = new Intent(AdminMainActivity.this, MainActivity.class);
-                startActivity(I);
-            }
 
-        });
+
+//
+//        signout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick (View view){
+//                Intent I = new Intent(AdminMainActivity.this, MainActivity.class);
+//                startActivity(I);
+//            }
+//
+//        });
         addstops.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
@@ -131,6 +140,33 @@ public class AdminMainActivity extends AppCompatActivity {
             }
         });
     }
+// For Action Bar menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id==R.id.signout)
+        {
+            Intent I = new Intent(AdminMainActivity.this, MainActivity.class);
+            startActivity(I);
+            return false;
+        }
+        if(id==R.id.List_View)
+        {
+            Intent I = new Intent(AdminMainActivity.this, ListViewActivity.class);
+            startActivity(I);
+            return false;
+        }
+        return true;
+    }
+
 
     public void addItem(String wname,String wcap){
         Map<String, Object> warehouse = new HashMap<>();
@@ -153,6 +189,8 @@ public class AdminMainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 
     public void updateItem(String wname, String wcap, List<DocumentSnapshot> docs){
         for(DocumentSnapshot document : docs){
