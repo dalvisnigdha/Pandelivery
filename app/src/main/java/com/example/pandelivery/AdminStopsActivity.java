@@ -2,12 +2,15 @@ package com.example.pandelivery;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,9 +33,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.view.Menu;
+
 
 public class AdminStopsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    Button signout;
+//    Button signout;
     Button savestop;
     Button deletestop;
     Button backtowh;
@@ -47,9 +52,12 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_stops);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle("Admin");
         savestop = findViewById(R.id.savestop);
         deletestop = findViewById(R.id.deletestop);
-        signout = findViewById(R.id.signout);
+//        signout = findViewById(R.id.signout);
         backtowh = findViewById(R.id.backtowh);
         inp_stop = findViewById(R.id.inp_stop);
         inp_stopqty = findViewById(R.id.inp_stopqty);
@@ -85,15 +93,15 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         dropdown.setAdapter(adapter);
      
 
-
-        signout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view){
-                Intent I = new Intent(AdminStopsActivity.this, MainActivity.class);
-                startActivity(I);
-            }
-
-        });
+//
+//        signout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick (View view){
+//                Intent I = new Intent(AdminStopsActivity.this, MainActivity.class);
+//                startActivity(I);
+//            }
+//
+//        });
 
         savestop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +187,33 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
             }
 
         });
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id==R.id.signout)
+        {
+            Intent I = new Intent(AdminStopsActivity.this, MainActivity.class);
+            startActivity(I);
+            return false;
+        }
+        if(id==R.id.List_View)
+        {
+            Intent I = new Intent(AdminStopsActivity.this, ListViewActivity.class);
+            startActivity(I);
+            return false;
+        }
+        return true;
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,

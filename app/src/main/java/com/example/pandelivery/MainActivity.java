@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle("Welcome to Pandelivery");
+
         firebaseAuth = FirebaseAuth.getInstance();
         inp_user = findViewById(R.id.email);
         inp_password = findViewById(R.id.password);

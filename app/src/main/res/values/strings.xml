@@ -10,4 +10,8 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_maps">Map</string>
+    <string name="List_View">List View</string>
+    <string name="signout">Sign Out</string>
+    <string name="google_maps_key" translatable="false">AIzaSyD2VsKBjxbNuJnI38jgzDvLdaXIBtGfwq8</string>
+
 </resources>
