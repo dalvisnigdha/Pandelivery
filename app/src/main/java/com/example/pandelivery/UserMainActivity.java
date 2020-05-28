@@ -59,8 +59,8 @@ private GoogleMap mMap;
             mapFragment.getMapAsync(this);
 
 //        signout = findViewById(R.id.signout);
-//        ActionBar actionbar = getSupportActionBar();
-//        actionbar.setTitle("User");
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle("User");
 
             // ArrayList updated :
             arrayList.add(iit_delhi);
@@ -85,10 +85,29 @@ private GoogleMap mMap;
 
 
         @Override
-        public boolean onCreateOptionsMenu(Menu menu) {
-            getMenuInflater().inflate(R.menu.main_menu, menu);
+        public boolean onCreateOptionsMenu(Menu menu)
+        {
+            getMenuInflater().inflate(R.menu.main_menu,menu);
             return true;
 
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item){
+            int id = item.getItemId();
+            if(id==R.id.signout)
+            {
+                Intent I = new Intent(UserMainActivity.this, MainActivity.class);
+                startActivity(I);
+                return false;
+            }
+            if(id==R.id.List_View)
+            {
+                Intent I = new Intent(UserMainActivity.this, ListViewActivity.class);
+                startActivity(I);
+                return false;
+            }
+            return true;
         }
 
         @Override
@@ -98,7 +117,7 @@ private GoogleMap mMap;
                 mMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title("Marker"));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(2));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(arrayList.get(i)));
-
+            }
 
                 mUiSettings = googleMap.getUiSettings();
                 mUiSettings.setMyLocationButtonEnabled(true);
@@ -116,7 +135,7 @@ private GoogleMap mMap;
 //                return false;
 //            }
 //        });
-            }
+
         }
     }
 
