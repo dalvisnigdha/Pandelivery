@@ -48,4 +48,8 @@ dependencies {
     //Firebase Cloud Firestore
     implementation 'com.google.firebase:firebase-firestore:21.4.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    resValue "string", "google_maps_key",
+            (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
 }

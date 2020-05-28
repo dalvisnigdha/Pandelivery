@@ -12,4 +12,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="List_View">List View</string>
     <string name="signout">Sign Out</string>
+    <string name="google_maps_key" translatable="false">AIzaSyD2VsKBjxbNuJnI38jgzDvLdaXIBtGfwq8</string>
+
 </resources>
