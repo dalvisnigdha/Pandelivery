@@ -1,6 +1,7 @@
 package com.example.pandelivery;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -38,6 +39,10 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle("Register");
+
+
         // Assign Layout Elements
         input_username = findViewById(R.id.fullname);
         input_email = findViewById(R.id.regemail);

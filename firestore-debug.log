@@ -5,11 +5,34 @@ If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment
 
 Dev App Server is now running.
 
-May 28, 2020 3:19:17 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+May 29, 2020 12:37:26 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected non-HTTP/2 connection.
-May 28, 2020 3:19:18 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+May 29, 2020 12:37:29 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-May 28, 2020 3:21:00 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+May 29, 2020 12:47:24 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-May 28, 2020 3:21:05 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+May 29, 2020 12:48:14 AM com.google.cloud.datastore.emulator.impl.events.FunctionsEmulatorEventPublisher sendHttpRequest
+WARNING: Unsuccessful HTTP response when publishing event for projects/pendelivery/triggers/makeUppercase: 500 Internal Server Error
+TypeError: Cannot read property 'toUpperCase' of undefined
+    at /home/tanay/Pandelivery/functions/index.js:67:34
+    at cloudFunction (/home/tanay/Pandelivery/functions/node_modules/firebase-functions/lib/cloud-functions.js:131:23)
+    at /home/tanay/.nvm/versions/node/v14.3.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:560:20
+    at /home/tanay/.nvm/versions/node/v14.3.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:545:19
+    at Generator.next (<anonymous>)
+    at /home/tanay/.nvm/versions/node/v14.3.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/home/tanay/.nvm/versions/node/v14.3.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:4:12)
+    at runFunction (/home/tanay/.nvm/versions/node/v14.3.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:542:12)
+    at /home/tanay/.nvm/versions/node/v14.3.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:559:15
+May 29, 2020 12:54:14 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+May 29, 2020 12:54:39 AM com.google.cloud.datastore.emulator.impl.events.FunctionsEmulatorEventPublisher lambda$publishEvent$0
+WARNING: Failed to publish event to localhost:5001: Read timed out
+May 29, 2020 1:01:11 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+May 29, 2020 1:01:19 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+May 29, 2020 1:25:50 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+May 29, 2020 1:26:24 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
