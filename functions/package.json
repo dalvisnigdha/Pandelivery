@@ -15,8 +15,7 @@
   "dependencies": {
     "firebase-admin": "^8.10.0",
     "firebase-functions": "^3.6.1",
-    "node-gyp": "^5.1.1",
-    "uuid": "^8.1.0"
+    "node_or_tools": "^1.0.7"
   },
   "devDependencies": {
     "eslint": "^5.12.0",
