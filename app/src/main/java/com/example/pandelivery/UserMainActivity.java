@@ -18,38 +18,51 @@ import android.view.Menu;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 
-public class UserMainActivity extends AppCompatActivity {
-//Button signout;
-//    Location currentLocation;
-//    FusedLocationProviderClient fusedLocationProviderClient;
+import java.util.ArrayList;
+
+public class UserMainActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    private GoogleMap mMap;
+// Locations to be added from Latitude and Longitude added in array list at the bootom
+    ArrayList<LatLng> arrayList = new ArrayList<LatLng>();
+
+    LatLng iit_delhi = new LatLng(28.5450,77.1926);
+    LatLng gurgaon = new LatLng(28.4595,77.0266);
+    LatLng cp = new LatLng(28.6304,77.2177);
+    LatLng faridabad = new LatLng(28.4089,77.3178);
+    LatLng indiagate = new LatLng(28.6129,77.2295);
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        setContentView(R.layout.activity_maps);
+//        ActionBar actionbar = getSupportActionBar();
+//        actionbar.setTitle("User");
 
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setTitle("User");
-        // Construct a GeoDataClient.
-        Object mGeoDataClient = Places.getGeoDataClient(this, null);
+        // ArrayList updated :
+        arrayList.add(iit_delhi);
+        arrayList.add(gurgaon);
+        arrayList.add(cp);
+        arrayList.add(faridabad);
+        arrayList.add(indiagate);
 
-        // Construct a PlaceDetectionClient.
-        Object mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
 
-        // Construct a FusedLocationProviderClient.
-        FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-//        signout = findViewById(R.id.signout);
+        //        signout = findViewById(R.id.signout);
 
 
 //        signout.setOnClickListener(new View.OnClickListener() {
@@ -61,39 +74,7 @@ public class UserMainActivity extends AppCompatActivity {
 //
 //        });
     }
-    private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        boolean mLocationPermissionGranted = false;
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mLocationPermissionGranted = true;
-                }
-            }
-        }
-        updateLocationUI();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -103,17 +84,6 @@ public class UserMainActivity extends AppCompatActivity {
 
     }
 
-    public void onMapReady(GoogleMap map) {
-        GoogleMap mMap = map;
-
-        // Do other setup activities here too, as described elsewhere in this tutorial.
-
-        // Turn on the My Location layer and the related control on the map.
-        updateLocationUI();
-
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
@@ -130,5 +100,16 @@ public class UserMainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+    mMap = googleMap;
+    for(int i =0;i<arrayList.size();i++)
+        {
+            mMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title("Marker"));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(2));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(arrayList.get(i)));
+        }
     }
 }

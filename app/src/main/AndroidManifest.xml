@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.pandelivery">
 
-    <user-permission android:name="android.permission.INTERNET"/>
-    <user-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <user-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
