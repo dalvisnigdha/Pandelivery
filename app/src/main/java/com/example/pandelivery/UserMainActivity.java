@@ -104,11 +104,27 @@ private GoogleMap mMap;
             mMap.setOnMyLocationButtonClickListener(this);
             mMap.setOnMyLocationClickListener(this);
         }
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (i==0)
+            {
+                mMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title("Warehouse"));
+            }
+            else
+            {
+                mMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title("Stop "+i));
+            }
+
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(2));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(arrayList.get(i)));
+            }
+
+
         // Map UI Settings
         mUiSettings = mMap.getUiSettings();
         mUiSettings.setMyLocationButtonEnabled(true);
         mUiSettings.setZoomControlsEnabled(true);
-        //        mUiSettings.setCompassEnabled(true);
+        mUiSettings.setCompassEnabled(true);
         //        mUiSettings.setScrollGesturesEnabled(true);
         mUiSettings.setZoomGesturesEnabled(true);
         //        mUiSettings.setTiltGesturesEnabled(true);
@@ -198,32 +214,6 @@ private GoogleMap mMap;
             }
             return true;
         }
-
-//        @Override
-//        public void onMapReady(GoogleMap googleMap) {
-//            mMap = googleMap;
-//            for (int i = 0; i < arrayList.size(); i++) {
-//                mMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title("Marker"));
-//                mMap.animateCamera(CameraUpdateFactory.zoomTo(2));
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(arrayList.get(i)));
-//            }
-//
-//                mUiSettings = googleMap.getUiSettings();
-//                mUiSettings.setMyLocationButtonEnabled(true);
-//                mUiSettings.setZoomControlsEnabled(true);
-////       ccc mUiSettings.setCompassEnabled(true);
-////        ccc mUiSettings.setScrollGesturesEnabled(true);
-//                mUiSettings.setZoomGesturesEnabled(true);
-////        cccc mUiSettings.setTiltGesturesEnabled(true);
-//                mUiSettings.setRotateGesturesEnabled(true);
-////        ccc googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-////            ccc@Override
-////            ccc public boolean onMarkerClick(Marker marker) {
-//////              ccc  int position = (int)(marker.getTag());
-//////               ccc Toast.makeText(con, ""+marker.getPosition(), Toast.LENGTH_LONG).show();
-////                cccreturn false;
-////           ccc }
-////       ccc });
 
         }
 
