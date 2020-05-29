@@ -100,7 +100,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                             }
                             else if(useritem.contains(position))
                             {
-                                useritem.remove(position);
+                                useritem.remove(new Integer(position));
                             }
 
                         }
