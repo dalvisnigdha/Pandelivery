@@ -177,6 +177,10 @@ exports.solveVRP = functions.firestore
     var docNew = change.after.data();
     var docOld = change.before.data();
 
+    if(!(runVRP in docNew)){
+      return null;
+    }
+
     var docRef = db.doc("VRP"+docNew.warehouse);
     docRef.get().then( documentSnapshot => {
       if(documentSnapshot.exists){
