@@ -1,12 +1,10 @@
 package com.example.pandelivery;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,10 +29,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import android.view.Menu;
 
 
 public class AdminStopsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -44,6 +41,9 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
     EditText inp_stop;
     EditText inp_stopqty;
     Spinner dropdown;
+    EditText inp_stopLat;
+    EditText inp_stopLong;
+    TextView listviewstoptxt;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "AdminStopsActivity";
     private static String warehouse = "";
@@ -57,15 +57,20 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         actionbar.setTitle("Admin");
         savestop = findViewById(R.id.savestop);
         deletestop = findViewById(R.id.deletestop);
-//        signout = findViewById(R.id.signout);
+        listviewstoptxt = findViewById(R.id.listviewwhtxt);
         backtowh = findViewById(R.id.backtowh);
         inp_stop = findViewById(R.id.inp_stop);
         inp_stopqty = findViewById(R.id.inp_stopqty);
         dropdown = findViewById(R.id.spinnerwh);
+        inp_stopLat = findViewById(R.id.inp_stopLat);
+        inp_stopLong = findViewById(R.id.inp_stopLong);
         dropdown.setOnItemSelectedListener(this);
 
         String stop= inp_stop.getText().toString();
         String stopqty = inp_stopqty.getText().toString();
+        String stopLat = inp_stopLat.getText().toString();
+        String stopLong = inp_stopLong.getText().toString();
+
         // Add list of warehouses here
         //        String[] items = new String[]{"Choose a warehouse","1","2","3","4"};
         final List<String> items = new ArrayList<String>();
@@ -91,22 +96,23 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdown.setAdapter(adapter);
-     
 
-//
-//        signout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick (View view){
-//                Intent I = new Intent(AdminStopsActivity.this, MainActivity.class);
-//                startActivity(I);
-//            }
-//
-//        });
+
+
+        listviewstoptxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view){
+                Intent I = new Intent(AdminStopsActivity.this, ListViewActivity.class);
+                startActivity(I);
+            }
+
+        });
 
         savestop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
 //            Save the data in stop and stopqty to the database
+                // Add stops Latitude and Longitude Here
                 final String stop_int= inp_stop.getText().toString();
                 final String stopqty_int = inp_stopqty.getText().toString();
 
@@ -151,7 +157,7 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
             public void onClick(View view) {
                 final String stop_int= inp_stop.getText().toString();
                 final String stopqty_int = inp_stopqty.getText().toString();
-//            Delete the data in stop and stopqty to the database
+//            Delete the Latitude and Longitude of stops from database
                 db.collection("warehouse")
                         .whereEqualTo("warehouse",warehouse)
                         .get()

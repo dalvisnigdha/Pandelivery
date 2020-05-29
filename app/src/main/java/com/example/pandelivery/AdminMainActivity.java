@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +36,9 @@ public class AdminMainActivity extends AppCompatActivity {
     EditText inp_whcap;
     Button savewh;
     Button deletewh;
+    EditText inp_whLat;
+    EditText inp_whLong;
+    TextView listviewwhtxt;
 
     // Access a Cloud Firestore instance from your Activity
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -48,27 +52,30 @@ public class AdminMainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("Admin");
 
-//        signout = findViewById(R.id.signout);
+        listviewwhtxt = findViewById(R.id.listviewwhtxt);
         addstops = findViewById(R.id.addstops);
         inp_wh = findViewById(R.id.inp_wh);
         inp_whcap = findViewById(R.id.inp_whcap);
         savewh = findViewById(R.id.savewh);
         deletewh = findViewById(R.id.deletewh);
+        inp_whLat = findViewById(R.id.inp_whLat);
+        inp_whLong = findViewById(R.id.inp_whLong);
 
         final String wh= inp_wh.getText().toString();
         final String whcap = inp_whcap.getText().toString();
+        final String whLat = inp_whLat.getText().toString();
+        final String whLong = inp_whLong.getText().toString();
 
 
+        listviewwhtxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view){
+                Intent I = new Intent(AdminMainActivity.this, ListViewActivity.class);
+                startActivity(I);
+            }
 
-//
-//        signout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick (View view){
-//                Intent I = new Intent(AdminMainActivity.this, MainActivity.class);
-//                startActivity(I);
-//            }
-//
-//        });
+        });
+
         addstops.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
@@ -82,6 +89,7 @@ public class AdminMainActivity extends AppCompatActivity {
             @Override
             public void onClick (View view){
 //            Save the data in wh and whcap to the database
+                // Add data whLat and whLong to the data base
                 final String wh_int= inp_wh.getText().toString();
                 final String whcap_int = inp_whcap.getText().toString();
 
@@ -115,6 +123,8 @@ public class AdminMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //            Delete the data in wh and whcap to the database
+                // Delete data whLat and whLong to the data base
+
                 Log.d(TAG, "Deleting warehouse");
                 final String wh_int= inp_wh.getText().toString();
                 final String whcap_int = inp_whcap.getText().toString();

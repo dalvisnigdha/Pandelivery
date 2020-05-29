@@ -62,7 +62,7 @@
         android:ems="10"
         android:hint="Enter Warehouse Name"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/listviewwh"
+        app:layout_constraintEnd_toEndOf="@+id/listviewwhtxt"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/whaddpage"
         app:layout_constraintTop_toBottomOf="@+id/whaddpage" />
@@ -71,16 +71,17 @@
         android:id="@+id/inp_whcap"
         android:layout_width="358dp"
         android:layout_height="45dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="28dp"
         android:ems="10"
         android:hint="Enter capacity"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="@+id/inp_wh"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/inp_wh"
         app:layout_constraintTop_toBottomOf="@+id/inp_wh" />
 
     <TextView
-        android:id="@+id/listviewwh"
+        android:id="@+id/listviewwhtxt"
         android:layout_width="82dp"
         android:layout_height="28dp"
         android:layout_marginLeft="152dp"
@@ -106,9 +107,9 @@
         android:id="@+id/deletewh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="84dp"
-        android:layout_marginRight="84dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="180dp"
         android:text="Delete"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +126,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/savewh" />
 
-<!--    <de.hdodenhof.circleimageview.CircleImageView-->
+    <EditText
+        android:id="@+id/inp_whLat"
+        android:layout_width="360dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Enter Latitude +N -S"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/inp_whcap"
+        app:layout_constraintTop_toBottomOf="@+id/inp_whcap" />
+
+    <EditText
+        android:id="@+id/inp_whLong"
+        android:layout_width="357dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Enter Longitude +E -W"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/inp_whLat"
+        app:layout_constraintStart_toStartOf="@+id/inp_whLat"
+        app:layout_constraintTop_toBottomOf="@+id/inp_whLat" />
+
+    <!--    <de.hdodenhof.circleimageview.CircleImageView-->
 <!--        android:id="@+id/admin_image"-->
 <!--        android:layout_width="48dp"-->
 <!--        android:layout_height="46dp"-->

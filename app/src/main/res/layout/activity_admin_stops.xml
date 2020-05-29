@@ -64,7 +64,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/listviewstop"
+        android:id="@+id/listviewwhtxt"
         android:layout_width="82dp"
         android:layout_height="28dp"
         android:layout_marginLeft="220dp"
@@ -97,10 +97,11 @@
         android:id="@+id/inp_stop"
         android:layout_width="363dp"
         android:layout_height="51dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="28dp"
         android:ems="10"
         android:hint="Enter stop name"
         android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerwh"
         app:layout_constraintStart_toStartOf="@+id/spinnerwh"
         app:layout_constraintTop_toBottomOf="@+id/spinnerwh" />
 
@@ -108,10 +109,11 @@
         android:id="@+id/inp_stopqty"
         android:layout_width="362dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="28dp"
         android:ems="10"
         android:hint="Enter quantity to be delivered"
         android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/inp_stop"
         app:layout_constraintStart_toStartOf="@+id/inp_stop"
         app:layout_constraintTop_toBottomOf="@+id/inp_stop" />
 
@@ -132,11 +134,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="84dp"
         android:layout_marginRight="84dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="32dp"
         android:text="Delete"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inp_stopqty" />
+        app:layout_constraintTop_toBottomOf="@+id/inp_stopLong" />
 
     <Button
         android:id="@+id/backtowh"
@@ -148,5 +150,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/savestop" />
+
+    <EditText
+        android:id="@+id/inp_stopLat"
+        android:layout_width="364dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Enter Latitude +N -S"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/inp_stopqty"
+        app:layout_constraintStart_toStartOf="@+id/inp_stopqty"
+        app:layout_constraintTop_toBottomOf="@+id/inp_stopqty" />
+
+    <EditText
+        android:id="@+id/inp_stopLong"
+        android:layout_width="364dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Enter Longitude +E -W"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/inp_stopLat"
+        app:layout_constraintStart_toStartOf="@+id/inp_stopLat"
+        app:layout_constraintTop_toBottomOf="@+id/inp_stopLat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
