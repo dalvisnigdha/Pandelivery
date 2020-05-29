@@ -148,7 +148,7 @@ function setupSearch(locs,prevParams){
   for(var i=0;i<loc.length-1;i++){
     d[i] = i;
   }
-  if(prevParams===null){
+  if(prevParams===undefined){
     nv = 5;
   }
   else{
