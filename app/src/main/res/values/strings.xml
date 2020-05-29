@@ -12,9 +12,11 @@
     <string name="title_activity_maps">Map</string>
     <string name="List_View">List View</string>
     <string name="signout">Sign Out</string>
+    <string name="new_task">New Task</string>
     <string name="google_maps_key" translatable="false">AIzaSyD2VsKBjxbNuJnI38jgzDvLdaXIBtGfwq8</string>
     <string name="warehouse_name_display"><![CDATA[<Warehouse name here>]]></string>
     <string-array name = "stopslist">
+        <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>

@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +48,8 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
         String[] listitems;
         boolean[] checkeditems;
         ArrayList <Integer> useritem = new ArrayList<>();
+        Button Donebtn;
+        Button newtaskbtn;
 
         // Locations to be added from Latitude and Longitude added in array list at the bootom
 
@@ -65,11 +68,28 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_user_main);
             listbtn = findViewById(R.id.listbtn);
-        // Check Permission
+            Donebtn = findViewById(R.id.Donebtn);
+            newtaskbtn = findViewById(R.id.newtaskbtn);
+
+            newtaskbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            Donebtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openDialog();
+                }
+            });
+
+            // Check Permission
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 checkLocationPermission();
             }
-        // Maps
+            // Maps
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
             ActionBar actionbar = getSupportActionBar();
@@ -97,6 +117,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                             if(isChecked){
                                 if(! useritem.contains(position)){
                                     useritem.add(position);
+                                    Log.d("my tag","add "+ useritem.toString());
                                 }
                             }
                             else if(useritem.contains(position))
@@ -138,6 +159,11 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
 
                 }
             });
+    }
+
+    public void openDialog(){
+      DonDialog dondialog = new DonDialog();
+      dondialog.show(getSupportFragmentManager(),"done dialog");
     }
 
     @Override
@@ -247,7 +273,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             int id = item.getItemId();
             if(id==R.id.signout)
             {
-                FirebaseAuth.getInstance().signOut();   // For Signout this line is important
+                FirebaseAuth.getInstance().signOut();
                 Intent I = new Intent(UserMainActivity.this, MainActivity.class);
                 startActivity(I);
                 return false;
@@ -258,6 +284,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                 startActivity(I);
                 return false;
             }
+
             return true;
         }
 
