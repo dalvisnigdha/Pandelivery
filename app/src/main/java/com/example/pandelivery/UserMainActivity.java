@@ -110,7 +110,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                     PolylineOptions polylineOptions = new PolylineOptions().addAll(maplocationList).clickable(true);
                     polyline = mMap.addPolyline(polylineOptions);
 
-                    polyline.setColor(Color.rgb(173,216,230));
+                    polyline.setColor(Color.rgb(102,178,255));
                 }
             });
 
