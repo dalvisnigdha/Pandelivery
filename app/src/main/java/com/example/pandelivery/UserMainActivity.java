@@ -48,6 +48,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
         boolean[] checkeditems;
         ArrayList <Integer> useritem = new ArrayList<>();
         Button Donebtn;
+        Button newtaskbtn;
 
         // Locations to be added from Latitude and Longitude added in array list at the bootom
 
@@ -67,11 +68,27 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             setContentView(R.layout.activity_user_main);
             listbtn = findViewById(R.id.listbtn);
             Donebtn = findViewById(R.id.Donebtn);
-        // Check Permission
+            newtaskbtn = findViewById(R.id.newtaskbtn);
+
+            newtaskbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            Donebtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openDialog();
+                }
+            });
+
+            // Check Permission
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 checkLocationPermission();
             }
-        // Maps
+            // Maps
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
             ActionBar actionbar = getSupportActionBar();
@@ -85,7 +102,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             arrayList.add(indiagate);
 
             //array list of checkbox
-            listitems = getResources().getStringArray(R.array.stopslist);
+
             checkeditems = new boolean[listitems.length];
 
             listbtn.setOnClickListener(new View.OnClickListener(){
@@ -141,6 +158,11 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
 
                 }
             });
+    }
+
+    public void openDialog(){
+      DonDialog dondialog = new DonDialog();
+      dondialog.show(getSupportFragmentManager(),"done dialog");
     }
 
     @Override
@@ -260,6 +282,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                 startActivity(I);
                 return false;
             }
+
             return true;
         }
 
