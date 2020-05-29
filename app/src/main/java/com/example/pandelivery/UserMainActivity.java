@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +47,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
         String[] listitems;
         boolean[] checkeditems;
         ArrayList <Integer> useritem = new ArrayList<>();
+        Button Donebtn;
 
         // Locations to be added from Latitude and Longitude added in array list at the bootom
 
@@ -64,6 +66,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_user_main);
             listbtn = findViewById(R.id.listbtn);
+            Donebtn = findViewById(R.id.Donebtn);
         // Check Permission
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 checkLocationPermission();
@@ -96,11 +99,12 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                             if(isChecked){
                                 if(! useritem.contains(position)){
                                     useritem.add(position);
+                                    Log.d("my tag","add "+ useritem.toString());
                                 }
                             }
-                            else if(useritem.contains(position))
-                            {
+                            else if(useritem.contains(position)) {
                                 useritem.remove(position);
+                                Log.d("my tag","delete "+ useritem.toString());
                             }
 
                         }
