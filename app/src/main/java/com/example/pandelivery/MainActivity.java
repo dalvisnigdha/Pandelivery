@@ -24,14 +24,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     // Defining Variables
@@ -77,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         b_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Redirect to register
                 Intent I = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(I);
             }
