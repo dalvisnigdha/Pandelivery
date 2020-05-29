@@ -136,14 +136,14 @@
         app:layout_constraintStart_toStartOf="@+id/inp_whLat"
         app:layout_constraintTop_toBottomOf="@+id/inp_whLat" />
 
-    <Button
-        android:id="@+id/computepath"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Assign Path"
-        app:layout_constraintBottom_toBottomOf="@+id/whaddpage"
-        app:layout_constraintEnd_toEndOf="@+id/inp_wh"
-        app:layout_constraintTop_toTopOf="@+id/whaddpage" />
+<!--    <Button-->
+<!--        android:id="@+id/computepath"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Assign Path"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/whaddpage"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/inp_wh"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/whaddpage" />-->
 
     <!--    <de.hdodenhof.circleimageview.CircleImageView-->
 <!--        android:id="@+id/admin_image"-->

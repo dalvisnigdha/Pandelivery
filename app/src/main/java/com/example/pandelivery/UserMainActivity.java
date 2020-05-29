@@ -12,6 +12,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +32,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
@@ -51,8 +54,8 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
         ArrayList <Integer> useritem = new ArrayList<>();
         Button Donebtn;
         Button newtaskbtn;
-        boolean working = true;
-
+        boolean working = false;
+        Polyline polyline = null;
         String[] listitems = {"gurgaon","cp","faridabad","indiagate"};//hard coded
         String warehouse = "iit_delhi";
 
@@ -103,6 +106,11 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                 @Override
                 public void onClick(View v) {
                     working = true;
+                    if(polyline != null) polyline.remove();
+                    PolylineOptions polylineOptions = new PolylineOptions().addAll(maplocationList).clickable(true);
+                    polyline = mMap.addPolyline(polylineOptions);
+
+                    polyline.setColor(Color.rgb(173,216,230));
                 }
             });
 

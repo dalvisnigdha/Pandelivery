@@ -39,7 +39,7 @@ public class AdminMainActivity extends AppCompatActivity {
     Button deletewh;
     EditText inp_whLat;
     EditText inp_whLong;
-    int flag = 0;
+
 //    TextView listviewwhtxt;
 
     // Access a Cloud Firestore instance from your Activity
@@ -62,7 +62,7 @@ public class AdminMainActivity extends AppCompatActivity {
         deletewh = findViewById(R.id.deletewh);
         inp_whLat = findViewById(R.id.inp_whLat);
         inp_whLong = findViewById(R.id.inp_whLong);
-        computepath = findViewById(R.id.computepath);
+
 
         final String wh= inp_wh.getText().toString();
         final String whcap = inp_whcap.getText().toString();
@@ -79,13 +79,7 @@ public class AdminMainActivity extends AppCompatActivity {
 //
 //        });
 
-        computepath.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view){
-                flag = 1;
-            }
 
-        });
         addstops.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
