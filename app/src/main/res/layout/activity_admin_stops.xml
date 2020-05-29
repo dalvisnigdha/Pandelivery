@@ -63,17 +63,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/listviewwhtxt"
-        android:layout_width="82dp"
-        android:layout_height="28dp"
-        android:layout_marginLeft="220dp"
-        android:layout_marginStart="220dp"
-        android:text="List View"
-        android:textColor="#2196F3"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/stopsaddpage"
-        app:layout_constraintStart_toEndOf="@+id/stopsaddpage" />
+<!--    <Button-->
+<!--        android:id="@+id/computepath"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Assign Path"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/whaddpage"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/inp_stop"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/stopsaddpage" />-->
 
     <Spinner
         android:id="@+id/spinnerwh"
