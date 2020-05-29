@@ -68,8 +68,8 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
 
         String stop= inp_stop.getText().toString();
         String stopqty = inp_stopqty.getText().toString();
-        String stopLat = inp_stopLat.getText().toString();
-        String stopLong = inp_stopLong.getText().toString();
+        final String stopLat = inp_stopLat.getText().toString();
+        final String stopLong = inp_stopLong.getText().toString();
 
         // Add list of warehouses here
         //        String[] items = new String[]{"Choose a warehouse","1","2","3","4"};
@@ -115,40 +115,44 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                 // Add stops Latitude and Longitude Here
                 final String stop_int= inp_stop.getText().toString();
                 final String stopqty_int = inp_stopqty.getText().toString();
+                final String stopLat_int = inp_stopLat.getText().toString();
+                final String stopLong_int = inp_stopLong.getText().toString();
 
-                db.collection("warehouse")
+                if(warehouse.equals("Choose a warehouse")){
+                    Toast.makeText(AdminStopsActivity.this, "Select a warehouse first", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    db.collection("warehouse")
                         .whereEqualTo("warehouse", warehouse)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    QuerySnapshot query  = task.getResult();
-                                    if(query.isEmpty()){
-                                        Log.d(TAG, "Adding stops: ", task.getException());
-                                        Toast.makeText(AdminStopsActivity.this, "Warehouse not found", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else{
-                                        Log.d(TAG, "Updating documents: ", task.getException());
-                                        for(DocumentSnapshot document : query.getDocuments()) {
-                                            DocumentReference docRef = db.collection("warehouse").document(document.getId());
-                                            Map<String,Object> data = document.getData();
-                                            if(data.containsKey("stops")){
-                                                updateItem(stop_int,stopqty_int,data,document.getId());
-                                            }
-                                            else{
-                                                addItem(stop_int,stopqty_int,document.getId());
-                                            }
+                            if (task.isSuccessful()) {
+                                QuerySnapshot query  = task.getResult();
+                                if(query.isEmpty()){
+                                    Log.d(TAG, "Warehouse not found: ", task.getException());
+                                    Toast.makeText(AdminStopsActivity.this, "Warehouse not found", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Log.d(TAG, "Updating documents: ", task.getException());
+                                    for(DocumentSnapshot document : query.getDocuments()) {
+                                        DocumentReference docRef = db.collection("warehouse").document(document.getId());
+                                        Map<String,Object> data = document.getData();
+                                        if(data.containsKey("stops")){
+                                            updateItem(stop_int,stopqty_int,stopLat_int,stopLong_int,data,document.getId());
+                                        }
+                                        else{
+                                            addItem(stop_int,stopqty_int,stopLat_int,stopLong_int,document.getId());
                                         }
                                     }
-                                } else {
-                                    Log.d(TAG, "Error getting documents: ", task.getException());
                                 }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
                             }
                         });
-
-                inp_stop.setText("");
-                inp_stopqty.setText("");
+                }
             }
 
         });
@@ -158,6 +162,10 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                 final String stop_int= inp_stop.getText().toString();
                 final String stopqty_int = inp_stopqty.getText().toString();
 //            Delete the Latitude and Longitude of stops from database
+                if(warehouse.equals("Choose a warehouse")){
+                    Toast.makeText(AdminStopsActivity.this, "Select a warehouse first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 db.collection("warehouse")
                         .whereEqualTo("warehouse",warehouse)
                         .get()
@@ -180,8 +188,6 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                                 }
                             }
                         });
-                inp_stop.setText("");
-                inp_stopqty.setText("");
             }
         });
 
@@ -232,11 +238,19 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         // Another interface callback
     }
 
-    public void addItem(String sname,String scap,String docId){
+    public void addItem(String sname,String scap,String slat, String slong,String docId){
         List<String> stops = new ArrayList<String>();
-        stops.add(sname+"#"+scap);
-        DocumentReference docRef = db.collection("warehouse").document(docId);
-        docRef.update("stops", stops)
+        if(sname.isEmpty() || scap.isEmpty() || slat.isEmpty() || slong.isEmpty()){
+            Toast.makeText(AdminStopsActivity.this, "One or more fields empty!", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            inp_stop.setText("");
+            inp_stopqty.setText("");
+            inp_stopLat.setText("");
+            inp_stopLong.setText("");
+            stops.add(sname+"#"+scap+"#"+slat+"#"+slong);
+            DocumentReference docRef = db.collection("warehouse").document(docId);
+            docRef.update("stops", stops)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -251,11 +265,16 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                         Toast.makeText(AdminStopsActivity.this, "Error adding stop", Toast.LENGTH_SHORT).show();
                     }
                 });
+        }
+
     }
 
-    public void updateItem(String sname, String scap, Map<String,Object> data, String docId){
+    public void updateItem(String sname, String scap,String slat, String slong, Map<String,Object> data, String docId){
+        if(sname.isEmpty()){
+            Toast.makeText(AdminStopsActivity.this, "Stop name empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
         DocumentReference docRef = db.collection("warehouse").document(docId);
-        String newStop = sname + "#" + scap;
         ArrayList<String> stops = (ArrayList<String>) data.get("stops");
         int index = -1;
         for(int i =0;i<stops.size();i++){
@@ -265,30 +284,62 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
             }
         }
         if(index==-1){
-            stops.add(newStop);
+            if(sname.isEmpty() || scap.isEmpty() || slat.isEmpty() || slong.isEmpty()){
+                Toast.makeText(AdminStopsActivity.this, "One or more fields empty", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                stops.add(sname+"#"+scap+"#"+slat+"#"+slong);
+            }
         }
         else{
-            stops.set(index,newStop);
+            String[] prevStop = stops.get(index).split("#");
+            String updateStop = prevStop[0];
+            if(!scap.isEmpty()){
+                updateStop += ("#"+scap);
+            }
+            else{
+                updateStop += ("#"+prevStop[1]);
+            }
+            if(!slat.isEmpty()){
+                updateStop += ("#"+slat);
+            }
+            else{
+                updateStop += ("#"+prevStop[2]);
+            }
+            if(!slong.isEmpty()){
+                updateStop += ("#"+slong);
+            }
+            else{
+                updateStop += ("#"+prevStop[3]);
+            }
+            stops.set(index,updateStop);
         }
-
+        inp_stop.setText("");
+        inp_stopqty.setText("");
+        inp_stopLat.setText("");
+        inp_stopLong.setText("");
         docRef.update("stops", stops)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully updated in update!");
-                        Toast.makeText(AdminStopsActivity.this, "Stop Added Successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating document in update", e);
-                        Toast.makeText(AdminStopsActivity.this, "Error adding stop", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "DocumentSnapshot successfully updated in update!");
+                    Toast.makeText(AdminStopsActivity.this, "Stop Updated Successfully", Toast.LENGTH_SHORT).show();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w(TAG, "Error updating document in update", e);
+                    Toast.makeText(AdminStopsActivity.this, "Error adding stop", Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     public void deleteItem(String sname, String scap,QueryDocumentSnapshot document){
+        if(sname.isEmpty()){
+            Toast.makeText(AdminStopsActivity.this, "Stop name empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
         DocumentReference docRef = db.collection("warehouse").document(document.getId());
         ArrayList<String> stops = (ArrayList<String>) document.getData().get("stops");
         int index = -1;
@@ -302,24 +353,27 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
             Toast.makeText(AdminStopsActivity.this, "Stop not found", Toast.LENGTH_SHORT).show();
         }
         else{
+            inp_stop.setText("");
+            inp_stopqty.setText("");
+            inp_stopLat.setText("");
+            inp_stopLong.setText("");
             stops.remove(index);
             docRef.update("stops", stops)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully updated in delete!");
-                            Toast.makeText(AdminStopsActivity.this, "Stop deleted Successfully", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error updating document", e);
-                            Toast.makeText(AdminStopsActivity.this, "Error deleting stop", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated in delete!");
+                        Toast.makeText(AdminStopsActivity.this, "Stop deleted Successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                        Toast.makeText(AdminStopsActivity.this, "Error deleting stop", Toast.LENGTH_SHORT).show();
+                    }
+                });
         }
-
     }
 
 }

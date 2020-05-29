@@ -145,7 +145,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        // Persistent Login
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user != null) {
+            String displayName = user.getDisplayName();
+            String[] parts = displayName.split(",");
+            String user_type = parts[0];
+            if (user_type.equals("Admin")){
+                Intent I = new Intent(MainActivity.this, AdminMainActivity.class);
+                startActivity(I);
+                finish();
+            }else if (user_type.equals("Admin")){
+                Intent I = new Intent(MainActivity.this, UserMainActivity.class);
+                startActivity(I);
+                finish();
+            }
+        }
     }
 
 //    public void addItem(){

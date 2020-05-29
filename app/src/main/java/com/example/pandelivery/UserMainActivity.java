@@ -102,9 +102,9 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                                     Log.d("my tag","add "+ useritem.toString());
                                 }
                             }
-                            else if(useritem.contains(position)) {
-                                useritem.remove(position);
-                                Log.d("my tag","delete "+ useritem.toString());
+                            else if(useritem.contains(position))
+                            {
+                                useritem.remove(new Integer(position));
                             }
 
                         }
