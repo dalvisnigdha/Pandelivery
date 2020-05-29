@@ -40,15 +40,15 @@ import java.util.ArrayList;
 public class UserMainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener {
 //    Button signout;
-private GoogleMap mMap;
-        // Locations to be added from Latitude and Longitude added in array list at the bootom
-        ArrayList<LatLng> arrayList = new ArrayList<LatLng>();
+    private GoogleMap mMap;
+    // Locations to be added from Latitude and Longitude added in array list at the bootom
+    ArrayList<LatLng> arrayList = new ArrayList<LatLng>();
 
-        LatLng iit_delhi = new LatLng(28.5450, 77.1926);
-        LatLng gurgaon = new LatLng(28.4595, 77.0266);
-        LatLng cp = new LatLng(28.6304, 77.2177);
-        LatLng faridabad = new LatLng(28.4089, 77.3178);
-        LatLng indiagate = new LatLng(28.6129, 77.2295);
+    LatLng iit_delhi = new LatLng(28.5450, 77.1926);
+    LatLng gurgaon = new LatLng(28.4595, 77.0266);
+    LatLng cp = new LatLng(28.6304, 77.2177);
+    LatLng faridabad = new LatLng(28.4089, 77.3178);
+    LatLng indiagate = new LatLng(28.6129, 77.2295);
 
 
     // Map Objects
@@ -57,9 +57,9 @@ private GoogleMap mMap;
         // Map Objects
 
         @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_user_main);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_main);
 
         // Check Permission
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -67,22 +67,22 @@ private GoogleMap mMap;
         }
         // Maps
 
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
 //        signout = findViewById(R.id.signout);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("User");
 
-            // ArrayList updated :
-            arrayList.add(iit_delhi);
-            arrayList.add(gurgaon);
-            arrayList.add(cp);
-            arrayList.add(faridabad);
-            arrayList.add(indiagate);
+        // ArrayList updated :
+        arrayList.add(iit_delhi);
+        arrayList.add(gurgaon);
+        arrayList.add(cp);
+        arrayList.add(faridabad);
+        arrayList.add(indiagate);
 
 
-            //        signout = findViewById(R.id.signout);
+        //        signout = findViewById(R.id.signout);
 
 
 //        signout.setOnClickListener(new View.OnClickListener() {
@@ -189,33 +189,33 @@ private GoogleMap mMap;
     }
 
 
-        @Override
-        public boolean onCreateOptionsMenu(Menu menu)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id==R.id.signout)
         {
-            getMenuInflater().inflate(R.menu.main_menu,menu);
-            return true;
-
+            Intent I = new Intent(UserMainActivity.this, MainActivity.class);
+            startActivity(I);
+            return false;
         }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item){
-            int id = item.getItemId();
-            if(id==R.id.signout)
-            {
-                Intent I = new Intent(UserMainActivity.this, MainActivity.class);
-                startActivity(I);
-                return false;
-            }
-            if(id==R.id.List_View)
-            {
-                Intent I = new Intent(UserMainActivity.this, ListViewActivity.class);
-                startActivity(I);
-                return false;
-            }
-            return true;
+        if(id==R.id.List_View)
+        {
+            Intent I = new Intent(UserMainActivity.this, ListViewActivity.class);
+            startActivity(I);
+            return false;
         }
+        return true;
+    }
 
-        }
+}
 
 
 
