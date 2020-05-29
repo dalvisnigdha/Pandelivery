@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,10 +35,9 @@ import java.util.Map;
 
 
 public class AdminStopsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-//    Button signout;
     Button savestop;
     Button deletestop;
-    Button backtowh;
+//    Button backtowh;
     EditText inp_stop;
     EditText inp_stopqty;
     Spinner dropdown;
@@ -58,7 +58,7 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         savestop = findViewById(R.id.savestop);
         deletestop = findViewById(R.id.deletestop);
         listviewstoptxt = findViewById(R.id.listviewwhtxt);
-        backtowh = findViewById(R.id.backtowh);
+//        backtowh = findViewById(R.id.backtowh);
         inp_stop = findViewById(R.id.inp_stop);
         inp_stopqty = findViewById(R.id.inp_stopqty);
         dropdown = findViewById(R.id.spinnerwh);
@@ -191,14 +191,15 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
             }
         });
 
-        backtowh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view){
-                Intent I = new Intent(AdminStopsActivity.this, AdminMainActivity.class);
-                startActivity(I);
-            }
+//        backtowh.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick (View view){
+////                Intent I = new Intent(AdminStopsActivity.this, AdminMainActivity.class);
+////                startActivity(I);
+//                finish();
+//            }
+//        });
 
-        });
     }
 
 
@@ -215,15 +216,20 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         int id = item.getItemId();
         if(id==R.id.signout)
         {
+            FirebaseAuth.getInstance().signOut();
             Intent I = new Intent(AdminStopsActivity.this, MainActivity.class);
             startActivity(I);
+            finish();
             return false;
-        }
-        if(id==R.id.List_View)
+        }else if(id==R.id.List_View)
         {
             Intent I = new Intent(AdminStopsActivity.this, ListViewActivity.class);
             startActivity(I);
             return false;
+        }else if (id == android.R.id.home)      // IMPORTANT: Needed for back button if using action bar at the top
+        {
+            onBackPressed();
+            return true;
         }
         return true;
     }

@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         b_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent I = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(I);
             }
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent I = new Intent(MainActivity.this, AdminMainActivity.class);
                 startActivity(I);
                 finish();
-            }else if (user_type.equals("Admin")){
+            }else if (user_type.equals("User")){
                 Intent I = new Intent(MainActivity.this, UserMainActivity.class);
                 startActivity(I);
                 finish();

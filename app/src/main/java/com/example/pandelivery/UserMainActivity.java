@@ -36,6 +36,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -272,6 +273,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             int id = item.getItemId();
             if(id==R.id.signout)
             {
+                FirebaseAuth.getInstance().signOut();   // For Signout this line is important
                 Intent I = new Intent(UserMainActivity.this, MainActivity.class);
                 startActivity(I);
                 return false;
