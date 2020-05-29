@@ -131,7 +131,7 @@ function setupVRP(locs,maxTime){
     costs : d_d[0],
     durations : d_d[1],
     timeWindows : t_win,
-    demands : hdemands;
+    demands : hdemands
   }
 
   return paramVRP;
