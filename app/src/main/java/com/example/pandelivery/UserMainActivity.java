@@ -39,21 +39,27 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class UserMainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
-        GoogleMap.OnMyLocationClickListener {
+        GoogleMap.OnMyLocationClickListener,CheckDialog.CheckDialogListener {
         Button listbtn;
         private GoogleMap mMap;
-        String[] listitems;
+//        String[] listitems;
         boolean[] checkeditems;
         ArrayList <Integer> useritem = new ArrayList<>();
         Button Donebtn;
         Button newtaskbtn;
+        boolean working = true;
+
+        String[] listitems = {"gurgaon","cp","faridabad","indiagate"};//hard coded
+        String warehouse = "iit_delhi";
+
 
         // Locations to be added from Latitude and Longitude added in array list at the bootom
 
-        ArrayList<LatLng> arrayList = new ArrayList<LatLng>();
+        ArrayList<LatLng> maplocationList = new ArrayList<LatLng>();
 
         LatLng iit_delhi = new LatLng(28.5450, 77.1926);
         LatLng gurgaon = new LatLng(28.4595, 77.0266);
@@ -71,19 +77,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             Donebtn = findViewById(R.id.Donebtn);
             newtaskbtn = findViewById(R.id.newtaskbtn);
 
-            newtaskbtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                }
-            });
-
-            Donebtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openDialog();
-                }
-            });
 
             // Check Permission
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -96,76 +90,101 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             actionbar.setTitle("User");
 
             // ArrayList updated :
-            arrayList.add(iit_delhi);
-            arrayList.add(gurgaon);
-            arrayList.add(cp);
-            arrayList.add(faridabad);
-            arrayList.add(indiagate);
+            maplocationList.add(iit_delhi);
+            maplocationList.add(gurgaon);
+            maplocationList.add(cp);
+            maplocationList.add(faridabad);
+            maplocationList.add(indiagate);
 
             //array list of checkbox
-            listitems = getResources().getStringArray(R.array.stopslist);
+//            listitems = getResources().getStringArray(R.array.stopslist);
             checkeditems = new boolean[listitems.length];
+            newtaskbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    working = true;
+                }
+            });
 
             listbtn.setOnClickListener(new View.OnClickListener(){
                 @Override
-                public void onClick(View view){
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserMainActivity.this);
-                    mBuilder.setTitle(R.string.warehouse_name_display);
-                    mBuilder.setMultiChoiceItems(listitems, checkeditems, new DialogInterface.OnMultiChoiceClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
-                            if(isChecked){
-                                if(! useritem.contains(position)){
-                                    useritem.add(position);
-                                    Log.d("my tag","add "+ useritem.toString());
-                                }
-                            }
-                            else if(useritem.contains(position))
-                            {
-                                useritem.remove(new Integer(position));
-                            }
-
-                        }
-                    });
-                    mBuilder.setCancelable(false);
-                    mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String item = "";
-                            for(int i = 0; i<useritem.size();i++)
-                            {
-                                item = item + listitems[useritem.get(i)];
-                                if(i != useritem.size() -1){
-                                    item = item + ',';
+                public void onClick(View view) {
+                    if (working) {
+                        AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserMainActivity.this);
+                        mBuilder.setTitle("Warehouse-"+warehouse);
+                        mBuilder.setMultiChoiceItems(listitems, checkeditems, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
+                                if (isChecked) {
+                                    if (!useritem.contains(position)) {
+                                        useritem.add(position);
+                                        Log.d("my tag", "add " + useritem.toString());
+                                    }
+                                } else if (useritem.contains(position)) {
+                                    useritem.remove(new Integer(position));
                                 }
 
                             }
-                        }
-                    });
-                    mBuilder.setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                           for(int i=0;i<checkeditems.length;i++)
-                           {
-                               checkeditems[i]=false;
-                               useritem.clear();
+                        });
+                        mBuilder.setCancelable(false);
+                        mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String item = "";
+                                for (int i = 0; i < useritem.size(); i++) {
+                                    item = item + listitems[useritem.get(i)];
+                                    if (i != useritem.size() - 1) {
+                                        item = item + ',';
+                                    }
 
-                           }
-                        }
-                    });
-                    AlertDialog mDialog = mBuilder.create();
-                    mDialog.show();
+                                }
+                            }
+                        });
+                        mBuilder.setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                for (int i = 0; i < checkeditems.length; i++) {
+                                    checkeditems[i] = false;
+                                    useritem.clear();
+
+                                }
+                            }
+                        });
+                        AlertDialog mDialog = mBuilder.create();
+                        mDialog.show();
 
 
+                    }
+
+                }
+            });
+
+            Donebtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(working){
+                    if (listitems.length == useritem.size()) {
+                        Dialogdone();
+                        working = false;
+
+                    } else {
+                        Dialogcheck();
+                    }
+                }
                 }
             });
     }
 
-    public void openDialog(){
-      DonDialog dondialog = new DonDialog();
-      dondialog.show(getSupportFragmentManager(),"done dialog");
+    public void Dialogdone(){
+      DonDialog dialogdone = new DonDialog();
+      dialogdone.show(getSupportFragmentManager(),"completed dialog");
     }
 
+    public void Dialogcheck()
+    {
+        CheckDialog dialogcheck = new CheckDialog();
+        dialogcheck.show(getSupportFragmentManager(),"check dialog");
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {        // Check Permission
         mMap = googleMap;
@@ -176,18 +195,18 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             mMap.setOnMyLocationClickListener(this);
         }
 
-        for (int i = 0; i < arrayList.size(); i++) {
+        for (int i = 0; i < maplocationList.size(); i++) {
             if (i==0)
             {
-                mMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title("Warehouse"));
+                mMap.addMarker(new MarkerOptions().position(maplocationList.get(i)).title("Warehouse-"+warehouse));
             }
             else
             {
-                mMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title("Stop "+i));
+                mMap.addMarker(new MarkerOptions().position(maplocationList.get(i)).title("Stop "+i+"-"+listitems[i-1]));
             }
 
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(2));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(arrayList.get(i)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(maplocationList.get(i)));
             }
 
 
@@ -288,7 +307,11 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             return true;
         }
 
-        }
+    @Override
+    public void onYesClicked() {
+        working = false;
+    }
+}
 
 
 
