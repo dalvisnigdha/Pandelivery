@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -177,6 +178,7 @@ public class AdminMainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if(id==R.id.signout)
         {
+            FirebaseAuth.getInstance().signOut();
             Intent I = new Intent(AdminMainActivity.this, MainActivity.class);
             startActivity(I);
             return false;

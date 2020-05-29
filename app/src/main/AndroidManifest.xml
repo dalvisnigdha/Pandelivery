@@ -41,16 +41,14 @@
 
         <activity
             android:name=".AdminStopsActivity"
-            android:parentActivityName=".AdminMainActivity" />
+            android:parentActivityName="com.example.pandelivery.AdminMainActivity" />
         <activity
             android:name=".RegisterActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".AdminMainActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".AdminMainActivity"/>
         <activity
-            android:name=".UserMainActivity"
-            android:parentActivityName=".MainActivity">
+            android:name=".UserMainActivity">
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
