@@ -103,7 +103,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             arrayList.add(indiagate);
 
             //array list of checkbox
-
+            listitems = getResources().getStringArray(R.array.stopslist);
             checkeditems = new boolean[listitems.length];
 
             listbtn.setOnClickListener(new View.OnClickListener(){
@@ -273,7 +273,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             int id = item.getItemId();
             if(id==R.id.signout)
             {
-                FirebaseAuth.getInstance().signOut();   // For Signout this line is important
+                FirebaseAuth.getInstance().signOut();
                 Intent I = new Intent(UserMainActivity.this, MainActivity.class);
                 startActivity(I);
                 return false;

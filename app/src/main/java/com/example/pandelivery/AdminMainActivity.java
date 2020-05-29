@@ -31,7 +31,7 @@ import java.util.Map;
 import android.view.Menu;
 
 public class AdminMainActivity extends AppCompatActivity {
-//    Button signout;
+    Button computepath;
     Button addstops;
     EditText inp_wh;
     EditText inp_whcap;
@@ -39,7 +39,8 @@ public class AdminMainActivity extends AppCompatActivity {
     Button deletewh;
     EditText inp_whLat;
     EditText inp_whLong;
-    TextView listviewwhtxt;
+    int flag = 0;
+//    TextView listviewwhtxt;
 
     // Access a Cloud Firestore instance from your Activity
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -53,7 +54,7 @@ public class AdminMainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("Admin");
 
-        listviewwhtxt = findViewById(R.id.listviewwhtxt);
+//        listviewwhtxt = findViewById(R.id.listviewwhtxt);
         addstops = findViewById(R.id.addstops);
         inp_wh = findViewById(R.id.inp_wh);
         inp_whcap = findViewById(R.id.inp_whcap);
@@ -61,6 +62,7 @@ public class AdminMainActivity extends AppCompatActivity {
         deletewh = findViewById(R.id.deletewh);
         inp_whLat = findViewById(R.id.inp_whLat);
         inp_whLong = findViewById(R.id.inp_whLong);
+        computepath = findViewById(R.id.computepath);
 
         final String wh= inp_wh.getText().toString();
         final String whcap = inp_whcap.getText().toString();
@@ -68,15 +70,22 @@ public class AdminMainActivity extends AppCompatActivity {
         final String whLong = inp_whLong.getText().toString();
 
 
-        listviewwhtxt.setOnClickListener(new View.OnClickListener() {
+//        listviewwhtxt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick (View view){
+//                Intent I = new Intent(AdminMainActivity.this, ListViewActivity.class);
+//                startActivity(I);
+//            }
+//
+//        });
+
+        computepath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
-                Intent I = new Intent(AdminMainActivity.this, ListViewActivity.class);
-                startActivity(I);
+                flag = 1;
             }
 
         });
-
         addstops.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){

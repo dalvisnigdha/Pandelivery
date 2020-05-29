@@ -43,7 +43,7 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
     Spinner dropdown;
     EditText inp_stopLat;
     EditText inp_stopLong;
-    TextView listviewstoptxt;
+//    TextView listviewstoptxt;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "AdminStopsActivity";
     private static String warehouse = "";
@@ -57,7 +57,7 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         actionbar.setTitle("Admin");
         savestop = findViewById(R.id.savestop);
         deletestop = findViewById(R.id.deletestop);
-        listviewstoptxt = findViewById(R.id.listviewwhtxt);
+//        listviewstoptxt = findViewById(R.id.listviewwhtxt);
 //        backtowh = findViewById(R.id.backtowh);
         inp_stop = findViewById(R.id.inp_stop);
         inp_stopqty = findViewById(R.id.inp_stopqty);
@@ -98,15 +98,15 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         dropdown.setAdapter(adapter);
 
 
-
-        listviewstoptxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view){
-                Intent I = new Intent(AdminStopsActivity.this, ListViewActivity.class);
-                startActivity(I);
-            }
-
-        });
+//
+//        listviewstoptxt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick (View view){
+//                Intent I = new Intent(AdminStopsActivity.this, ListViewActivity.class);
+//                startActivity(I);
+//            }
+//
+//        });
 
         savestop.setOnClickListener(new View.OnClickListener() {
             @Override
