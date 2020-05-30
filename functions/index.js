@@ -254,7 +254,7 @@ exports.solveVRP = functions.firestore
 				    }
 				    return Promise.all(writeStop);
 				});	    	
-		    });
+        	});
 		} 
 	}else{
 		console.log("Have not solved before");

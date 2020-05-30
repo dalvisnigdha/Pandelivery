@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -77,7 +78,34 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         ready.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (warehouse.equals("")){
+                    Toast.makeText(AdminStopsActivity.this, "Please select a warehouse", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                DocumentReference dref = db.collection("VRP").document(warehouse);
+                if (dref == null){
+                    Toast.makeText(AdminStopsActivity.this, "Plan not yet ready. Wait for some time!", Toast.LENGTH_LONG).show();
+                    Log.d("Firestore", "VRP not found. Plan not ready");
+                    return;
+                }
+                dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            String vrp_status = task.getResult().getString("solveVRP");
+                            Log.d("Firestore", "solveVRP is " + vrp_status);
+                            if (vrp_status.equals("0")){
+                                Toast.makeText(AdminStopsActivity.this, "Plan not found. Try later!", Toast.LENGTH_LONG).show();
+                                Log.d("Firestore VRP", "VRP is 0");
+                            }else if (vrp_status.equals("1")){
+                                Toast.makeText(AdminStopsActivity.this, "Path computed", Toast.LENGTH_LONG).show();
+                                Log.d("Firestore VRP", "VRP is 1");
+                            }
+                        }else{
+                            Log.d("Firestore VRP", "Plan Who Knows");
+                        }
+                    }
+                });
             }
         });
 
