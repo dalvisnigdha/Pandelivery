@@ -47,6 +47,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -213,9 +214,11 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                     Map user_data = snapshot.getData();
                     Log.d("Firestore Route", source + " data: " + user_data);
                     if ( ((Long)user_data.get("assigned")).intValue() == 1){
-                        Log.d("Firestore Route", "ASSIGNED: " + (user_data.get("route")).getClass());
+                        Log.d("Firestore Route", "ASSIGNED");
                         // SNIGDHA
-                        ArrayList route = (ArrayList)user_data.get("route");
+                        ArrayList route = (ArrayList)user_data.get("route");    // Array having routes
+                        GeoPoint p1 = (GeoPoint)route.get(0);       // Access array element
+                        LatLng pp1 = new LatLng(p1.getLatitude(), p1.getLongitude());   // Convert to latlng for display on map
                     }else{
                         // DO NOTHING
                         Log.d("Firestore Route", "DO NOTHING " + user_data.get("assigned"));
