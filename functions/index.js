@@ -11,7 +11,6 @@
 
 const functions = require('firebase-functions');
 
-
 // The Firebase Admin SDK to access Cloud Firestore.
 const admin = require('firebase-admin');
 
@@ -119,12 +118,14 @@ function setupVRP(locs,maxTime){
     t_win[i] = [0,mTime];
   }
   var hdemands = new Array();
-  for(var i=0;i<locs.length;i++){
+  for(var i=0;i<locs.length-1;i++){
     for(var j=0;j<locs.length;j++){
       hdemands[i][j] = locs[i].split("#")[1];
     }
   }
-
+  for(var i=0;i<locs.length;i++){
+    hdemands[hdemands.length][i] = 0;
+  }
 
   var paramVRP = {
     numNodes:locs.length,
@@ -132,7 +133,7 @@ function setupVRP(locs,maxTime){
     durations : d_d[1],
     timeWindows : t_win,
     demands : hdemands
-  }
+  };
 
   return paramVRP;
 }
@@ -177,14 +178,23 @@ exports.solveVRP = functions.firestore
     var docNew = change.after.data();
     var docOld = change.before.data();
 
-    if(!(runVRP in docNew)){
+    if(!("runVRP" in docNew)){
+      console.log("runVRP is not set");
       return null;
     }
+    if("runVRP" in docOld){
+    	if(docOld.runVRP===docNew.runVRP){
+    		console.log("runVRP is not updated");
+    		return null;
+    	}
+    }
 
+    console.log("Setting up VRP");
     var docRef = db.doc("VRP"+docNew.warehouse);
     docRef.get().then( documentSnapshot => {
       if(documentSnapshot.exists){
         if(docRef.get("solveVRP")){
+          console.log("VRP already solved");
           return null;
         }
         else{
@@ -196,11 +206,12 @@ exports.solveVRP = functions.firestore
           var setup = setupVRP(stops);
           var VRP = new ortools.VRP(setup);
           var vrpSearchOpts = setupSearch(stops,docNew);
-          VRP.Solve(vrpSearchOpts, function (err, solution) {
+          VRP.Solve(vrpSearchOpts, async function (err, solution) {
             if (err) {
               vrpSearchOpts.warehouse = docNew.warehouse;
               vrpSearchOpts.warehouse_cap = docNew.warehouse_cap;
               vrpSearchOpts.solveVRP = 0;
+              console.log("VRP did not find a solution");
               return docRef.update(vrpSearchOpts);
             }
             vrpSearchOpts.warehouse = docNew.warehouse;
@@ -209,7 +220,32 @@ exports.solveVRP = functions.firestore
             vrpSearchOpts.cost = solution.cost;
             vrpSearchOpts.routes = solution.routes;
             vrpSearchOpts.times = solution.times;
-            return docRef.update(vrpSearchOpts);
+
+            var index = 0;
+            var flag = 0;
+            var collectionRef = db.collection("users");
+            var writeVRP = await docRef.update(vrpSearchOpts);
+            return collectionRef.listDocuments().then(documentRefs => {
+            	return db.getAll(documentRefs);
+            }).then(async documentSnapshots => {
+            	for (let documentSnapshot of documentSnapshots) {
+			      if(documentSnapshot.get("assigned")=== -1 ){
+			      	if(solution.routes[index]!=[]){
+			      		flag = 1;
+			      		break;
+			      	}
+			      	var writeStop = await collectionRef.doc(documentSnapshot.id).update({warehouse:docNew.warehouse,assigned:1,stops:solution.routes[index]});
+			      	index++;
+			      }
+			    }
+			    while(true){
+			    	if(solution.routes[index]!=[]){
+			      		break
+			      	}
+			    	var writeStop = await collectionRef.doc(documentSnapshot.id).update({warehouse:docNew.warehouse,assigned:0,stops:solution.routes[index]});
+			      	index++;
+			    }
+            });
           });
         } 
       }
@@ -225,18 +261,44 @@ exports.solveVRP = functions.firestore
         var vrpSearchOpts = setupSearch(stops);
         VRP.Solve(vrpSearchOpts, function (err, solution) {
           if (err) {
+              vrpSearchOpts.warehouse = docNew.warehouse;
+              vrpSearchOpts.warehouse_cap = docNew.warehouse_cap;
+              vrpSearchOpts.solveVRP = 0;
+              console.log("VRP did not find a solution");
+              return docRef.update(vrpSearchOpts);
+            }
             vrpSearchOpts.warehouse = docNew.warehouse;
             vrpSearchOpts.warehouse_cap = docNew.warehouse_cap;
-            vrpSearchOpts.solveVRP = 0;
-            return docRef.set(vrpSearchOpts);
-          }
-          vrpSearchOpts.warehouse = docNew.warehouse;
-          vrpSearchOpts.warehouse_cap = docNew.warehouse_cap;
-          vrpSearchOpts.solveVRP = 1;
-          vrpSearchOpts.cost = solution.cost;
-          vrpSearchOpts.routes = solution.routes;
-          vrpSearchOpts.times = solution.times;
-          return docRef.set(vrpSearchOpts);
+            vrpSearchOpts.solveVRP = 1;
+            vrpSearchOpts.cost = solution.cost;
+            vrpSearchOpts.routes = solution.routes;
+            vrpSearchOpts.times = solution.times;
+
+            var index = 0;
+            var flag = 0;
+            var collectionRef = db.collection("users");
+            var writeVRP = await docRef.update(vrpSearchOpts);
+            return collectionRef.listDocuments().then(documentRefs => {
+            	return db.getAll(documentRefs);
+            }).then(async documentSnapshots => {
+            	for (let documentSnapshot of documentSnapshots) {
+			      if(documentSnapshot.get("assigned")=== -1 ){
+			      	if(solution.routes[index]!=[]){
+			      		flag = 1;
+			      		break;
+			      	}
+			      	var writeStop = await collectionRef.doc(documentSnapshot.id).update({warehouse:docNew.warehouse,assigned:1,stops:solution.routes[index]});
+			      	index++;
+			      }
+			    }
+			    while(true){
+			    	if(solution.routes[index]!=[]){
+			      		break
+			      	}
+			    	var writeStop = await collectionRef.doc(documentSnapshot.id).update({warehouse:docNew.warehouse,assigned:0,stops:solution.routes[index]});
+			      	index++;
+			    }
+            });
         });      
       }
     }); 
