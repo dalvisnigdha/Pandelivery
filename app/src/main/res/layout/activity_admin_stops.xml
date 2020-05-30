@@ -63,14 +63,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <Button-->
-<!--        android:id="@+id/computepath"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Assign Path"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/whaddpage"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/inp_stop"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/stopsaddpage" />-->
+    <Button
+        android:id="@+id/computepath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Assign Path"
+        app:layout_constraintBottom_toBottomOf="@+id/stopsaddpage"
+        app:layout_constraintEnd_toEndOf="@+id/inp_stop"
+        app:layout_constraintTop_toTopOf="@+id/stopsaddpage" />
 
     <Spinner
         android:id="@+id/spinnerwh"
