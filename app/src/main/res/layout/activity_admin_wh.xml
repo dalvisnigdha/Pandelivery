@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminWhActivity">
+
+    <TextView
+        android:id="@+id/whaddpage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Warehouse"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.092"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/inp_wh"
+        android:layout_width="357dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Enter Warehouse Name"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/whaddpage"
+        app:layout_constraintTop_toBottomOf="@+id/whaddpage" />
+
+    <EditText
+        android:id="@+id/inp_whcap"
+        android:layout_width="358dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Enter capacity"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/inp_wh"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/inp_wh"
+        app:layout_constraintTop_toBottomOf="@+id/inp_wh" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
