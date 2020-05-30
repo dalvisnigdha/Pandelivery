@@ -192,6 +192,12 @@ public class AdminMainActivity extends AppCompatActivity {
             startActivity(I);
             return false;
         }
+        if(id==R.id.help)
+        {
+            Intent I = new Intent(AdminMainActivity.this, HelpActivity.class);
+            startActivity(I);
+            return false;
+        }
         return true;
     }
 

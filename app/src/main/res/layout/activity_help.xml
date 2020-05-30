@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HelpActivity">
+
+    <TextView
+        android:id="@+id/pt12"
+        android:layout_width="365dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="12dp"
+        android:text='4. "List view"-List of warehouse and stops'
+        android:textColor="#050000"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="@+id/pt11"
+        app:layout_constraintStart_toStartOf="@+id/pt7"
+        app:layout_constraintTop_toBottomOf="@+id/pt11" />
+
+    <TextView
+        android:id="@+id/pt11"
+        android:layout_width="351dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="12dp"
+        android:text='c. "Done"-On task completion'
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/pt8"
+        app:layout_constraintStart_toStartOf="@+id/pt8"
+        app:layout_constraintTop_toBottomOf="@+id/pt8" />
+
+    <TextView
+        android:id="@+id/pt9"
+        android:layout_width="348dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="12dp"
+        android:text='a. "New Task" - Click to start a task'
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/pt7"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/pt6"
+        app:layout_constraintTop_toBottomOf="@+id/pt7" />
+
+    <TextView
+        android:id="@+id/pt8"
+        android:layout_width="353dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="12dp"
+        android:text='b. "Showlist"- Displays complete list of warehouse and stops assigned. Click on the stops to navigate. Check the stops on delivery.'
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/pt9"
+        app:layout_constraintStart_toStartOf="@+id/pt9"
+        app:layout_constraintTop_toBottomOf="@+id/pt9" />
+
+    <TextView
+        android:id="@+id/pt7"
+        android:layout_width="371dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="12dp"
+        android:text="3. User Page"
+        android:textColor="#070000"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="@+id/pt6"
+        app:layout_constraintStart_toStartOf="@+id/pt2"
+        app:layout_constraintTop_toBottomOf="@+id/pt6" />
+
+    <TextView
+        android:id="@+id/pt6"
+        android:layout_width="350dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="12dp"
+        android:text="d. Add next stop on save/delete previous stop"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/pt5"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/pt5"
+        app:layout_constraintTop_toBottomOf="@+id/pt5" />
+
+    <TextView
+        android:id="@+id/pt5"
+        android:layout_width="349dp"
+        android:layout_height="83dp"
+        android:layout_marginTop="12dp"
+        android:text='c. "Add Stops"- Choose the warehouse whose stops have to be added. Enter the stops name, capacity, latitude and longitude then save or delete'
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/pt4"
+        app:layout_constraintStart_toStartOf="@+id/pt4"
+        app:layout_constraintTop_toBottomOf="@+id/pt4" />
+
+    <TextView
+        android:id="@+id/pt4"
+        android:layout_width="343dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="12dp"
+        android:text="b. Add next warehouse on saving/deleting previous warehouse"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/pt3"
+        app:layout_constraintStart_toStartOf="@+id/pt3"
+        app:layout_constraintTop_toBottomOf="@+id/pt3" />
+
+    <TextView
+        android:id="@+id/pt3"
+        android:layout_width="345dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="13dp"
+        android:text='a. "Save/Edit or Delete" - Enter warehouse name, capacity latitude and longitude then save/delete'
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/pt2"
+        app:layout_constraintTop_toBottomOf="@+id/pt2" />
+
+    <TextView
+        android:id="@+id/pt2"
+        android:layout_width="366dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="12dp"
+        android:text="2. Admin Page"
+        android:textColor="#070000"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/pt1"
+        app:layout_constraintTop_toBottomOf="@+id/pt1" />
+
+    <TextView
+        android:id="@+id/pt1"
+        android:layout_width="366dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="16dp"
+        android:text="1. Register yourself with your corresponding user type"
+        android:textColor="#050000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
