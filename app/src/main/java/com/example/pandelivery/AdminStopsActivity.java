@@ -118,22 +118,47 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                                 Log.d(TAG, "Updating documents: ", task.getException());
                                 for(DocumentSnapshot document : query.getDocuments()) {
                                     DocumentReference docRef = db.collection("warehouse").document(document.getId());
-//                                    Map<String,Object> data = document.getData(); // not used
-                                    docRef.update("runVRP", 1)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Log.d(TAG, "DocumentSnapshot successfully updated in update!");
-                                                    Toast.makeText(AdminStopsActivity.this, "Request Sent!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.w(TAG, "Error updating document in update", e);
-                                                    Toast.makeText(AdminStopsActivity.this, "Request Failed!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+                                    Map<String,Object> data = document.getData(); // not used
+                                    if(!data.containsKey("runVRP")){
+                                        docRef.update("runVRP", 1)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d(TAG, "DocumentSnapshot successfully updated in update!");
+                                                        Toast.makeText(AdminStopsActivity.this, "Request Sent!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w(TAG, "Error updating document in update", e);
+                                                        Toast.makeText(AdminStopsActivity.this, "Request Failed!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+                                    else{
+                                        int prevVal = (int) data.get("runVRP");
+                                        int newVal = 0;
+                                        if(prevVal==0){
+                                            newVal = 1;
+                                        }
+                                        docRef.update("runVRP", newVal)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d(TAG, "DocumentSnapshot successfully updated in update!");
+                                                        Toast.makeText(AdminStopsActivity.this, "Request Sent!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w(TAG, "Error updating document in update", e);
+                                                        Toast.makeText(AdminStopsActivity.this, "Request Failed!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+
                                 }
                             }
                         } else {
