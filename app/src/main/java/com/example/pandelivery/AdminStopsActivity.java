@@ -44,6 +44,7 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
     EditText inp_stopLat;
     EditText inp_stopLong;
     Button computepath;
+    Button ready;
     int flag = 0;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -64,12 +65,22 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         inp_stopLat = findViewById(R.id.inp_stopLat);
         inp_stopLong = findViewById(R.id.inp_stopLong);
         computepath = findViewById(R.id.computepath);
+        ready = findViewById(R.id.ready);
         dropdown.setOnItemSelectedListener(this);
 
         String stop= inp_stop.getText().toString();
         String stopqty = inp_stopqty.getText().toString();
         final String stopLat = inp_stopLat.getText().toString();
         final String stopLong = inp_stopLong.getText().toString();
+
+
+        ready.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
 
         // Add list of warehouses here
         //        String[] items = new String[]{"Choose a warehouse","1","2","3","4"};
