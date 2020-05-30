@@ -240,16 +240,16 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                         }
                         // User routeList to draw on Map - SNIGDHA
                         // SNIGDHA OLD CODE
-                        route = (ArrayList)user_data.get("route");    // Array having routes
-                        GeoPoint pt;       // Access array element
-                        LatLng mappt;// Convert to latlng for display on map
-                        for(int i =0;i<route.size();i++)
-                        {
-                            pt = (GeoPoint)route.get(i);
-                            mappt = new LatLng(pt.getLatitude(),pt.getLongitude());
-                            maplocationList.add(mappt);
-
-                        }
+//                        route = (ArrayList)user_data.get("route");    // Array having routes
+//                        GeoPoint pt;       // Access array element
+//                        LatLng mappt;// Convert to latlng for display on map
+//                        for(int i =0;i<route.size();i++)
+//                        {
+//                            pt = (GeoPoint)route.get(i);
+//                            mappt = new LatLng(pt.getLatitude(),pt.getLongitude());
+//                            maplocationList.add(mappt);
+//
+//                        }
                     }else{
                         // DO NOTHING
                         Log.d("Firestore Route", "Route not assigned");
