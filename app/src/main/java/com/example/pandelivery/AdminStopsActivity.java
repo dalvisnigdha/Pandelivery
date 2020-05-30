@@ -305,6 +305,12 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
             onBackPressed();
             return true;
         }
+        if(id==R.id.help)
+        {
+            Intent I = new Intent(AdminStopsActivity.this, HelpActivity.class);
+            startActivity(I);
+            return false;
+        }
         return true;
     }
 

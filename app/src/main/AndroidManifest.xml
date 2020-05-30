@@ -3,15 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.pandelivery">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality.
-    -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,11 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="ExtraText">
-
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key"/>
-
-        <activity android:name=".ListViewActivity"></activity>
+        <activity android:name=".AdminWhActivity" />
+        <activity android:name=".ListViewActivity" />
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -34,35 +25,32 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
-
-        </activity>
-
-        <activity
             android:name=".AdminStopsActivity"
-            android:parentActivityName="com.example.pandelivery.AdminMainActivity" />
+            android:parentActivityName=".AdminMainActivity" />
         <activity
             android:name=".RegisterActivity"
             android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".AdminMainActivity"/>
-        <activity
-            android:name=".UserMainActivity">
-        </activity>
+        <activity android:name=".AdminMainActivity" />
+        <activity android:name=".UserMainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
     </application>
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 </manifest>

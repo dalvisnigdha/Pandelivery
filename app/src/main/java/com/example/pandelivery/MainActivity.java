@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     TextView b_register;
     TextView b_forgotPass;
     CheckBox showPass;
+    TextView instructions;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     FirebaseAuth firebaseAuth;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         b_forgotPass = findViewById(R.id.forgotpwd);
         radioGroup = findViewById(R.id.usertype);
         showPass = findViewById(R.id.pwdshow);
+        instructions = findViewById(R.id.instructions);
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -67,7 +69,14 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
+        instructions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Redirect to register
+                Intent I = new Intent(MainActivity.this, HelpActivity.class);
+                startActivity(I);
+            }
+        });
         b_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
