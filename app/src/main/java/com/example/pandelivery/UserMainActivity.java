@@ -69,14 +69,8 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
     boolean working = false;
     Polyline polyline = null;
     ArrayList route;
-    String[] listitems ={"1","2","3","4","5"};
-//    listitems = new String[ routeList.size() ];
-//                for(int i = 0; i<routeList.size();i++)
-//    {
-//        listitems[i] = maplocationnamelist.get(i)+"|"+maplocationcaplist.get(i);
-//    }
-
-
+    String[] listitems = {"gurgaon","cp","faridabad","indiagate"};//hard coded
+    String warehouse = "iit_delhi";
     FirebaseFirestore db;
     FirebaseUser user;
     FirebaseAuth firebaseAuth;
@@ -107,7 +101,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
         firebaseAuth = FirebaseAuth.getInstance();
 
         user = firebaseAuth.getCurrentUser();
-
+        addRouteListener();
 
         // Check Permission
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -129,29 +123,26 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
 
         // Array list of checkbox
 //            listitems = getResources().getStringArray(R.array.stopslist);
-
+        checkeditems = new boolean[listitems.length];
         newtaskbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 working = true;
-                addRouteListener();
-                Log.d("route tag", "route Snigdha ------------------ "+maplocationList);
                 if(polyline != null) polyline.remove();
                 PolylineOptions polylineOptions = new PolylineOptions().addAll(maplocationList).clickable(true);
                 polyline = mMap.addPolyline(polylineOptions);
                 polyline.setColor(Color.rgb(102,178,255));
-
-
+                Log.d("route tag", "route path "+maplocationList);
 
             }
         });
-        checkeditems = new boolean[listitems.length];
+
         listbtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 if (working) {
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserMainActivity.this);
-                    mBuilder.setTitle("Warehouse-"+maplocationnamelist.get(0).toString());
+                    mBuilder.setTitle("Warehouse-"+warehouse);
                     mBuilder.setMultiChoiceItems(listitems, checkeditems, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
@@ -249,16 +240,15 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                         }
                         // User routeList to draw on Map - SNIGDHA
                         // SNIGDHA OLD CODE
-//                        route = (ArrayList)user_data.get("route");    // Array having routes
-//                        GeoPoint pt;       // Access array element
-//                        LatLng mappt;// Convert to latlng for display on map
-                        Log.d("route tag", "route List Abhay ------------------ "+routeList);
-                        GeoPoint pt;
-                        for(int i =0;i<routeList.size();i++)
+                        route = (ArrayList)user_data.get("route");    // Array having routes
+                        GeoPoint pt;       // Access array element
+                        LatLng mappt;// Convert to latlng for display on map
+                        for(int i =0;i<route.size();i++)
                         {
-                            maplocationnamelist.add(routeList.get(i).name);
-                            maplocationcaplist.add(routeList.get(i).capacity);
-                            maplocationList.add(routeList.get(i).location);
+                            pt = (GeoPoint)route.get(i);
+                            mappt = new LatLng(pt.getLatitude(),pt.getLongitude());
+                            maplocationList.add(mappt);
+
                         }
                     }else{
                         // DO NOTHING
@@ -304,9 +294,9 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
 
             for (int i = 0; i < maplocationList.size(); i++) {
                 if (i == 0) {
-                    mMap.addMarker(new MarkerOptions().position(maplocationList.get(i)).title("Warehouse-" + maplocationnamelist.get(i)));
+                    mMap.addMarker(new MarkerOptions().position(maplocationList.get(i)).title("Warehouse-" + warehouse));
                 } else {
-                    mMap.addMarker(new MarkerOptions().position(maplocationList.get(i)).title("Stop " + i+'-'+ maplocationnamelist.get(i)+"|"+maplocationcaplist.get(i).toString()));
+                    mMap.addMarker(new MarkerOptions().position(maplocationList.get(i)).title("Stop " + i));
                 }
 
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(21));
