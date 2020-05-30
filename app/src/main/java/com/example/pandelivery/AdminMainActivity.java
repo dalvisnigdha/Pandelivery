@@ -40,7 +40,6 @@ public class AdminMainActivity extends AppCompatActivity {
     EditText inp_whLat;
     EditText inp_whLong;
 
-//    TextView listviewwhtxt;
 
     // Access a Cloud Firestore instance from your Activity
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -54,7 +53,6 @@ public class AdminMainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("Admin");
 
-//        listviewwhtxt = findViewById(R.id.listviewwhtxt);
         addstops = findViewById(R.id.addstops);
         inp_wh = findViewById(R.id.inp_wh);
         inp_whcap = findViewById(R.id.inp_whcap);
@@ -68,17 +66,6 @@ public class AdminMainActivity extends AppCompatActivity {
         final String whcap = inp_whcap.getText().toString();
         final String whLat = inp_whLat.getText().toString();
         final String whLong = inp_whLong.getText().toString();
-
-
-//        listviewwhtxt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick (View view){
-//                Intent I = new Intent(AdminMainActivity.this, ListViewActivity.class);
-//                startActivity(I);
-//            }
-//
-//        });
-
 
         addstops.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -48,9 +48,12 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -71,6 +74,8 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
     FirebaseFirestore db;
     FirebaseUser user;
     FirebaseAuth firebaseAuth;
+
+    ArrayList<RPoint> routeList;
 
     // Locations to be added from Latitude and Longitude added in array list at the bootom
     ArrayList<LatLng> maplocationList = new ArrayList<LatLng>();
@@ -218,8 +223,20 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                     Map user_data = snapshot.getData();
                     Log.d("Firestore Route", source + " data: " + user_data);
                     if ( ((Long)user_data.get("assigned")).intValue() == 1){
-                        Log.d("Firestore Route", "ASSIGNED");
-                        // SNIGDHA
+                        Log.d("Firestore Route", "Route assigned and fetched");
+                        // Populate routeList
+                        ArrayList stopsList = (ArrayList)user_data.get("stops");
+                        ArrayList routeIndex = (ArrayList)user_data.get("route");
+                        routeList = new ArrayList<RPoint>();
+                        for (Object index : routeIndex){
+                            int ind = ((Long)index).intValue();
+                            String entry = (String)stopsList.get(ind);
+                            String[] vals = entry.split("#");
+                            RPoint obj = new RPoint(vals[0], Integer.parseInt(vals[1]), new LatLng(Double.parseDouble(vals[2]), Double.parseDouble(vals[3])));
+                            routeList.add(obj);
+                        }
+                        // User routeList to draw on Map - SNIGDHA
+                        // SNIGDHA OLD CODE
                         route = (ArrayList)user_data.get("route");    // Array having routes
                         GeoPoint pt;       // Access array element
                         LatLng mappt;// Convert to latlng for display on map
@@ -232,7 +249,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                         }
                     }else{
                         // DO NOTHING
-                        Log.d("Firestore Route", "DO NOTHING " + user_data.get("assigned"));
+                        Log.d("Firestore Route", "Route not assigned");
                     }
                 } else {
                     Log.d("Firestore Route", source + " data: null");
@@ -241,6 +258,17 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
         });
     }
 
+    class RPoint {
+        String name;
+        int capacity;
+        LatLng location;
+
+        public RPoint(String nm, int cap, LatLng loc){
+            name = nm;
+            capacity = cap;
+            location = loc;
+        }
+    };
     public void Dialogdone(){
       DonDialog dialogdone = new DonDialog();
       dialogdone.show(getSupportFragmentManager(),"completed dialog");
@@ -273,26 +301,13 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             }
 
 
-
         // Map UI Settings
         mUiSettings = mMap.getUiSettings();
         mUiSettings.setMyLocationButtonEnabled(true);
         mUiSettings.setZoomControlsEnabled(true);
         mUiSettings.setCompassEnabled(true);
-        //        mUiSettings.setScrollGesturesEnabled(true);
         mUiSettings.setZoomGesturesEnabled(true);
-        //        mUiSettings.setTiltGesturesEnabled(true);
         mUiSettings.setRotateGesturesEnabled(true);
-        //        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-        //            @Override
-        //            public boolean onMarkerClick(Marker marker) {
-        ////                int position = (int)(marker.getTag());
-        ////                Toast.makeText(con, ""+marker.getPosition(), Toast.LENGTH_LONG).show();
-        //                return false;
-        //            }
-        //        });
-
-
     }
 
     @Override

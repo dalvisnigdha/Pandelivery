@@ -28,7 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.functions.FirebaseFunctions;
+//import com.google.firebase.functions.FirebaseFunctions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,16 +38,15 @@ import java.util.Map;
 public class AdminStopsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Button savestop;
     Button deletestop;
-//    Button backtowh;
     EditText inp_stop;
     EditText inp_stopqty;
     Spinner dropdown;
     EditText inp_stopLat;
     EditText inp_stopLong;
     Button computepath;
+    Button ready;
     int flag = 0;
 
-//    TextView listviewstoptxt;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "AdminStopsActivity";
     private static String warehouse = "";
@@ -60,20 +59,28 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         actionbar.setTitle("Admin");
         savestop = findViewById(R.id.savestop);
         deletestop = findViewById(R.id.deletestop);
-//        listviewstoptxt = findViewById(R.id.listviewwhtxt);
-//        backtowh = findViewById(R.id.backtowh);
         inp_stop = findViewById(R.id.inp_stop);
         inp_stopqty = findViewById(R.id.inp_stopqty);
         dropdown = findViewById(R.id.spinnerwh);
         inp_stopLat = findViewById(R.id.inp_stopLat);
         inp_stopLong = findViewById(R.id.inp_stopLong);
         computepath = findViewById(R.id.computepath);
+        ready = findViewById(R.id.ready);
         dropdown.setOnItemSelectedListener(this);
 
         String stop= inp_stop.getText().toString();
         String stopqty = inp_stopqty.getText().toString();
         final String stopLat = inp_stopLat.getText().toString();
         final String stopLong = inp_stopLong.getText().toString();
+
+
+        ready.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
 
         // Add list of warehouses here
         //        String[] items = new String[]{"Choose a warehouse","1","2","3","4"};
@@ -102,15 +109,6 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         dropdown.setAdapter(adapter);
 
 
-//
-//        listviewstoptxt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick (View view){
-//                Intent I = new Intent(AdminStopsActivity.this, ListViewActivity.class);
-//                startActivity(I);
-//            }
-//
-//        });
         computepath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
@@ -131,22 +129,47 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                                 Log.d(TAG, "Updating documents: ", task.getException());
                                 for(DocumentSnapshot document : query.getDocuments()) {
                                     DocumentReference docRef = db.collection("warehouse").document(document.getId());
-//                                    Map<String,Object> data = document.getData(); // not used
-                                    docRef.update("runVRP", 1)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Log.d(TAG, "DocumentSnapshot successfully updated in update!");
-                                                    Toast.makeText(AdminStopsActivity.this, "Request Sent!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.w(TAG, "Error updating document in update", e);
-                                                    Toast.makeText(AdminStopsActivity.this, "Request Failed!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+                                    Map<String,Object> data = document.getData(); // not used
+                                    if(!data.containsKey("runVRP")){
+                                        docRef.update("runVRP", 1)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d(TAG, "DocumentSnapshot successfully updated in update!");
+                                                        Toast.makeText(AdminStopsActivity.this, "Request Sent!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w(TAG, "Error updating document in update", e);
+                                                        Toast.makeText(AdminStopsActivity.this, "Request Failed!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+                                    else{
+                                        int prevVal = (int) data.get("runVRP");
+                                        int newVal = 0;
+                                        if(prevVal==0){
+                                            newVal = 1;
+                                        }
+                                        docRef.update("runVRP", newVal)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d(TAG, "DocumentSnapshot successfully updated in update!");
+                                                        Toast.makeText(AdminStopsActivity.this, "Request Sent!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w(TAG, "Error updating document in update", e);
+                                                        Toast.makeText(AdminStopsActivity.this, "Request Failed!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+
                                 }
                             }
                         } else {
@@ -210,6 +233,8 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
             public void onClick(View view) {
                 final String stop_int= inp_stop.getText().toString();
                 final String stopqty_int = inp_stopqty.getText().toString();
+                final String stopLat_int = inp_stopLat.getText().toString();
+                final String stopLong_int = inp_stopLong.getText().toString();
 //            Delete the Latitude and Longitude of stops from database
                 if(warehouse.equals("Choose a warehouse")){
                     Toast.makeText(AdminStopsActivity.this, "Select a warehouse first", Toast.LENGTH_SHORT).show();
@@ -224,7 +249,7 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if(document.getData().containsKey("stops")){
-                                            deleteItem(stop_int,stopqty_int,document);
+                                            deleteItem(stop_int,stopqty_int, document);
                                         }
                                         else{
                                             Toast.makeText(AdminStopsActivity.this, "Stops not present", Toast.LENGTH_SHORT).show();
@@ -233,21 +258,14 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                                     }
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
-                                    Toast.makeText(AdminStopsActivity.this, "Error getting document", Toast.LENGTH_SHORT).show();// snigdha added
+                                    Toast.makeText(AdminStopsActivity.this, "Error getting document", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
             }
         });
 
-//        backtowh.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick (View view){
-////                Intent I = new Intent(AdminStopsActivity.this, AdminMainActivity.class);
-////                startActivity(I);
-//                finish();
-//            }
-//        });
+
 
     }
 
