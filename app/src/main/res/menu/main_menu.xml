@@ -6,6 +6,12 @@
         android:title="@string/List_View"
         android:id="@+id/List_View"
         app:showAsAction="never"/>
+
+    <item
+        android:title="Help"
+        android:id="@+id/help"
+        app:showAsAction="never"/>
+
     <item
         android:title="@string/signout"
         android:id="@+id/signout"
