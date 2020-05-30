@@ -102,7 +102,7 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                                 Log.d("Firestore VRP", "VRP is 1");
                             }
                         }else{
-                            Log.d("Firestore VRP", "");
+                            Log.d("Firestore VRP", "Plan Who Knows");
                         }
                     }
                 });

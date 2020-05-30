@@ -201,7 +201,9 @@ exports.solveVRP = functions.firestore
 		    console.log("Now allocating routes");
 		    return collectionRef.listDocuments().then(documentRefs => {
 		    	console.log("Retrieving All Documents");
-		    	return db.getAll(...documentRefs);
+          var t = db.getAll(...documentRefs);
+          console.log("TEST 1");
+		    	return t;
 		    }).then(documentSnapshots => {
 		    	console.log("Retrieved All documents");
 		    	var writeStop = [];
@@ -252,7 +254,9 @@ exports.solveVRP = functions.firestore
 			      	dummy++;
 			    }
 			    return Promise.all(writeStop);
-		    });
+		    }, reason => {
+          console.error(reason); // Error!
+        });
 		    });
 		} 
 	}else{
