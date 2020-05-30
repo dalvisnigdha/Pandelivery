@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.functions.FirebaseFunctions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
     EditText inp_stopLong;
     Button computepath;
     int flag = 0;
+
 //    TextView listviewstoptxt;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "AdminStopsActivity";
@@ -54,7 +56,6 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_stops);
-
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("Admin");
         savestop = findViewById(R.id.savestop);
@@ -114,6 +115,45 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
             @Override
             public void onClick (View view){
                 flag = 1;
+                db.collection("warehouse")
+                .whereEqualTo("warehouse", warehouse)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot query  = task.getResult();
+                            if(query.isEmpty()){
+                                Log.d(TAG, "Warehouse not found: ", task.getException());
+                                Toast.makeText(AdminStopsActivity.this, "Warehouse not found", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Log.d(TAG, "Updating documents: ", task.getException());
+                                for(DocumentSnapshot document : query.getDocuments()) {
+                                    DocumentReference docRef = db.collection("warehouse").document(document.getId());
+//                                    Map<String,Object> data = document.getData(); // not used
+                                    docRef.update("runVRP", 1)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully updated in update!");
+                                                    Toast.makeText(AdminStopsActivity.this, "Request Sent!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error updating document in update", e);
+                                                    Toast.makeText(AdminStopsActivity.this, "Request Failed!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
             }
 
         });
