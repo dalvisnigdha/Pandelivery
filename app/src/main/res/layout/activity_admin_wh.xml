@@ -43,4 +43,17 @@
         app:layout_constraintStart_toStartOf="@+id/inp_wh"
         app:layout_constraintTop_toBottomOf="@+id/inp_wh" />
 
+
+    <Button
+        android:id="@+id/addstops"
+        android:layout_width="159dp"
+        android:layout_height="52dp"
+        android:text="Add stops"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/whaddpage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.742"
+        app:layout_constraintStart_toEndOf="@+id/whaddpage"
+        app:layout_constraintTop_toTopOf="@+id/whaddpage" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
