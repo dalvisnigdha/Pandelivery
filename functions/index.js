@@ -190,7 +190,7 @@ exports.solveVRP = functions.firestore
     }
 
     console.log("Setting up VRP");
-    let docRef = db.doc("VRP"+docNew.warehouse);
+    let docRef = db.doc("VRP/"+docNew.warehouse);
     var documentSnapshot = await docRef.get();
 	if(documentSnapshot.exists){
 		if(docRef.get("solveVRP")){
@@ -269,7 +269,7 @@ exports.solveVRP = functions.firestore
 		      vrpSearchOpts.solveVRP = 0;
 		      console.log("VRP did not find a solution");
 		      return docRef.update(vrpSearchOpts);
-		    }
+		  }
 		    vrpSearchOpts.warehouse = docNew.warehouse;
 		    vrpSearchOpts.warehouse_cap = docNew.warehouse_cap;
 		    vrpSearchOpts.solveVRP = 1;
