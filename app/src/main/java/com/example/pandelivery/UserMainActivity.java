@@ -64,6 +64,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
     Button newtaskbtn;
     boolean working = false;
     Polyline polyline = null;
+    ArrayList route;
     String[] listitems = {"gurgaon","cp","faridabad","indiagate"};//hard coded
     String warehouse = "iit_delhi";
 
@@ -109,6 +110,10 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
         maplocationList.add(faridabad);
         maplocationList.add(indiagate);
 
+
+        user = firebaseAuth.getCurrentUser();
+        addRouteListener();
+
         //array list of checkbox
 //            listitems = getResources().getStringArray(R.array.stopslist);
         checkeditems = new boolean[listitems.length];
@@ -120,6 +125,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                 PolylineOptions polylineOptions = new PolylineOptions().addAll(maplocationList).clickable(true);
                 polyline = mMap.addPolyline(polylineOptions);
                 polyline.setColor(Color.rgb(102,178,255));
+                Log.d("route tag", "route path "+route);
             }
         });
 
@@ -190,8 +196,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             }
             }
         });
-        user = firebaseAuth.getCurrentUser();
-        addRouteListener();
+
     }
 
     public void addRouteListener(){
@@ -215,7 +220,8 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                     if ( ((Long)user_data.get("assigned")).intValue() == 1){
                         Log.d("Firestore Route", "ASSIGNED: " + (user_data.get("route")).getClass());
                         // SNIGDHA
-                        ArrayList route = (ArrayList)user_data.get("route");
+                        route = (ArrayList)user_data.get("route");
+
                     }else{
                         // DO NOTHING
                         Log.d("Firestore Route", "DO NOTHING " + user_data.get("assigned"));
