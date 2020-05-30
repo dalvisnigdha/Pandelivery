@@ -37,142 +37,186 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.annotations.Nullable;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 
 public class UserMainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
-        GoogleMap.OnMyLocationClickListener,CheckDialog.CheckDialogListener {
-        Button listbtn;
-        private GoogleMap mMap;
-//        String[] listitems;
-        boolean[] checkeditems;
-        ArrayList <Integer> useritem = new ArrayList<>();
-        Button Donebtn;
-        Button newtaskbtn;
-        boolean working = true;
+    GoogleMap.OnMyLocationClickListener,CheckDialog.CheckDialogListener {
+    Button listbtn;
+    private GoogleMap mMap;
+    boolean[] checkeditems;
+    ArrayList <Integer> useritem = new ArrayList<>();
+    Button Donebtn;
+    Button newtaskbtn;
+    boolean working = true;
+    FirebaseFirestore db;
+    FirebaseUser user;
+    FirebaseAuth firebaseAuth;
+    String[] listitems = {"gurgaon","cp","faridabad","indiagate"};//hard coded
+    String warehouse = "iit_delhi";
 
-        String[] listitems = {"gurgaon","cp","faridabad","indiagate"};//hard coded
-        String warehouse = "iit_delhi";
+    // Locations to be added from Latitude and Longitude added in array list at the bootom
+    ArrayList<LatLng> maplocationList = new ArrayList<LatLng>();
 
+    LatLng iit_delhi = new LatLng(28.5450, 77.1926);
+    LatLng gurgaon = new LatLng(28.4595, 77.0266);
+    LatLng cp = new LatLng(28.6304, 77.2177);
+    LatLng faridabad = new LatLng(28.4089, 77.3178);
+    LatLng indiagate = new LatLng(28.6129, 77.2295);
+    // Map Objects
+    UiSettings mUiSettings;
 
-        // Locations to be added from Latitude and Longitude added in array list at the bootom
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_main);
+        listbtn = findViewById(R.id.listbtn);
+        Donebtn = findViewById(R.id.Donebtn);
+        newtaskbtn = findViewById(R.id.newtaskbtn);
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        ArrayList<LatLng> maplocationList = new ArrayList<LatLng>();
+        // Check Permission
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkLocationPermission();
+        }
 
-        LatLng iit_delhi = new LatLng(28.5450, 77.1926);
-        LatLng gurgaon = new LatLng(28.4595, 77.0266);
-        LatLng cp = new LatLng(28.6304, 77.2177);
-        LatLng faridabad = new LatLng(28.4089, 77.3178);
-        LatLng indiagate = new LatLng(28.6129, 77.2295);
-        // Map Objects
-        UiSettings mUiSettings;
-            // Map Objects
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_user_main);
-            listbtn = findViewById(R.id.listbtn);
-            Donebtn = findViewById(R.id.Donebtn);
-            newtaskbtn = findViewById(R.id.newtaskbtn);
+        // Maps
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle("User");
 
+        // ArrayList updated :
+        maplocationList.add(iit_delhi);
+        maplocationList.add(gurgaon);
+        maplocationList.add(cp);
+        maplocationList.add(faridabad);
+        maplocationList.add(indiagate);
 
-
-            // Check Permission
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                checkLocationPermission();
-            }
-            // Maps
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
-            ActionBar actionbar = getSupportActionBar();
-            actionbar.setTitle("User");
-
-            // ArrayList updated :
-            maplocationList.add(iit_delhi);
-            maplocationList.add(gurgaon);
-            maplocationList.add(cp);
-            maplocationList.add(faridabad);
-            maplocationList.add(indiagate);
-
-            //array list of checkbox
+        //array list of checkbox
 //            listitems = getResources().getStringArray(R.array.stopslist);
-            checkeditems = new boolean[listitems.length];
-            newtaskbtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    working = true;
+        checkeditems = new boolean[listitems.length];
+        newtaskbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                working = true;
+            }
+        });
+
+        listbtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if (working) {
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserMainActivity.this);
+                    mBuilder.setTitle("Warehouse-"+warehouse);
+                    mBuilder.setMultiChoiceItems(listitems, checkeditems, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
+                            if (isChecked) {
+                                if (!useritem.contains(position)) {
+                                    useritem.add(position);
+                                    Log.d("my tag", "add " + useritem.toString());
+                                }
+                            } else if (useritem.contains(position)) {
+                                useritem.remove(new Integer(position));
+                            }
+
+                        }
+                    });
+                    mBuilder.setCancelable(false);
+                    mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String item = "";
+                            for (int i = 0; i < useritem.size(); i++) {
+                                item = item + listitems[useritem.get(i)];
+                                if (i != useritem.size() - 1) {
+                                    item = item + ',';
+                                }
+
+                            }
+                        }
+                    });
+                    mBuilder.setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            for (int i = 0; i < checkeditems.length; i++) {
+                                checkeditems[i] = false;
+                                useritem.clear();
+
+                            }
+                        }
+                    });
+                    AlertDialog mDialog = mBuilder.create();
+                    mDialog.show();
+
+
                 }
-            });
 
-            listbtn.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    if (working) {
-                        AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserMainActivity.this);
-                        mBuilder.setTitle("Warehouse-"+warehouse);
-                        mBuilder.setMultiChoiceItems(listitems, checkeditems, new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
-                                if (isChecked) {
-                                    if (!useritem.contains(position)) {
-                                        useritem.add(position);
-                                        Log.d("my tag", "add " + useritem.toString());
-                                    }
-                                } else if (useritem.contains(position)) {
-                                    useritem.remove(new Integer(position));
-                                }
+            }
+        });
 
-                            }
-                        });
-                        mBuilder.setCancelable(false);
-                        mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String item = "";
-                                for (int i = 0; i < useritem.size(); i++) {
-                                    item = item + listitems[useritem.get(i)];
-                                    if (i != useritem.size() - 1) {
-                                        item = item + ',';
-                                    }
+        Donebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(working){
+                if (listitems.length == useritem.size()) {
+                    Dialogdone();
+                    working = false;
 
-                                }
-                            }
-                        });
-                        mBuilder.setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                for (int i = 0; i < checkeditems.length; i++) {
-                                    checkeditems[i] = false;
-                                    useritem.clear();
+                } else {
+                    Dialogcheck();
+                }
+            }
+            }
+        });
 
-                                }
-                            }
-                        });
-                        AlertDialog mDialog = mBuilder.create();
-                        mDialog.show();
+        user = firebaseAuth.getCurrentUser();
+        addRouteListener();
+    }
 
+    public void addRouteListener(){
+        String uid = user.getUid();
+        final DocumentReference docRef = db.collection("users").document(uid);
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("Firestore Route", "Listen failed.", e);
+                    return;
+                }
 
+                String source = snapshot != null && snapshot.getMetadata().hasPendingWrites()
+                        ? "Local" : "Server";
+
+                if (snapshot != null && snapshot.exists()) {
+                    Map user_data = snapshot.getData();
+                    Log.d("Firestore Route", source + " data: " + user_data);
+                    if ( ((Long)user_data.get("assigned")).intValue() == 1){
+                        Log.d("Firestore Route", "ASSIGNED: " + (user_data.get("route")).getClass());
+                        // SNIGDHA
+                        ArrayList route = (ArrayList)user_data.get("route");
+                    }else{
+                        // DO NOTHING
+                        Log.d("Firestore Route", "DO NOTHING " + user_data.get("assigned"));
                     }
-
+                } else {
+                    Log.d("Firestore Route", source + " data: null");
                 }
-            });
-
-            Donebtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(working){
-                    if (listitems.length == useritem.size()) {
-                        Dialogdone();
-                        working = false;
-
-                    } else {
-                        Dialogcheck();
-                    }
-                }
-                }
-            });
+            }
+        });
     }
 
     public void Dialogdone(){
