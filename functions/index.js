@@ -118,12 +118,12 @@ function setupVRP(locs,maxTime){
     t_win[i] = [0,mTime];
   }
   var hdemands = new Array();
-  for(var i=0;i<locs.length-1;i++){
+  for(i=0;i<locs.length-1;i++){
     for(var j=0;j<locs.length;j++){
       hdemands[i][j] = locs[i].split("#")[1];
     }
   }
-  for(var i=0;i<locs.length;i++){
+  for(i=0;i<locs.length;i++){
     hdemands[hdemands.length][i] = 0;
   }
 
@@ -146,7 +146,7 @@ function setupSearch(locs,prevParams){
   for(var i=0;i<locs.length-1;i++){
     p[i] = locs.length - 1;
   }  
-  for(var i=0;i<loc.length-1;i++){
+  for(i=0;i<loc.length-1;i++){
     d[i] = i;
   }
   if(prevParams===undefined){
@@ -155,7 +155,7 @@ function setupSearch(locs,prevParams){
   else{
     nv = prevParams.numVehicles+5;
   }
-  for(var i=0;i<nv;i++){
+  for(i=0;i<nv;i++){
       rl[i] = [];
   }
   var vrpSearchOpts = {
@@ -190,7 +190,7 @@ exports.solveVRP = functions.firestore
     }
 
     console.log("Setting up VRP");
-    var docRef = db.doc("VRP"+docNew.warehouse);
+    let docRef = db.doc("VRP"+docNew.warehouse);
     docRef.get().then( documentSnapshot => {
       if(documentSnapshot.exists){
         if(docRef.get("solveVRP")){
@@ -228,38 +228,43 @@ exports.solveVRP = functions.firestore
             return collectionRef.listDocuments().then(documentRefs => {
             	return db.getAll(documentRefs);
             }).then(async documentSnapshots => {
+            	var writeStop = [];
             	for (let documentSnapshot of documentSnapshots) {
 			      if(documentSnapshot.get("assigned")=== -1 ){
-			      	if(solution.routes[index]!=[]){
+			      	if(solution.routes[index]!==[]){
 			      		flag = 1;
 			      		break;
 			      	}
-			      	var writeStop = await collectionRef.doc(documentSnapshot.id).update({warehouse:docNew.warehouse,assigned:1,stops:solution.routes[index]});
+			      	writeStop.push(collectionRef.doc(documentSnapshot.id)
+			      								.update({warehouse:docNew.warehouse,assigned:1,stops:solution.routes[index]}));
 			      	index++;
 			      }
 			    }
-			    while(true){
-			    	if(solution.routes[index]!=[]){
-			      		break
+			    while(flag===0){
+			    	if(solution.routes[index]!==[]){
+			      		break;
 			      	}
-			    	var writeStop = await collectionRef.doc(documentSnapshot.id).update({warehouse:docNew.warehouse,assigned:0,stops:solution.routes[index]});
+			    	writeStop.push(collectionRef.doc(documentSnapshot.id)
+			    								.update({warehouse:docNew.warehouse,assigned:0,stops:solution.routes[index]}));
 			      	index++;
 			    }
+			    return Promise.all(writeStop);
             });
           });
+          return null;
         } 
       }
       else{
-        var stops = docNew.stops;
+        stops = docNew.stops;
         stops[stops.length] = docNew.warehouse + "#"  + 
                               docNew.warehouse_cap + "#" +
                               docNew.warehouse_lat + "#" +
                               docNew.warehouse_long;
 
-        var setup = setupVRP(stops);
-        var VRP = new ortools.VRP(setup);
-        var vrpSearchOpts = setupSearch(stops);
-        VRP.Solve(vrpSearchOpts, function (err, solution) {
+        setup = setupVRP(stops);
+        VRP = new ortools.VRP(setup);
+        vrpSearchOpts = setupSearch(stops);
+        VRP.Solve(vrpSearchOpts,async function (err, solution) {
           if (err) {
               vrpSearchOpts.warehouse = docNew.warehouse;
               vrpSearchOpts.warehouse_cap = docNew.warehouse_cap;
@@ -281,25 +286,33 @@ exports.solveVRP = functions.firestore
             return collectionRef.listDocuments().then(documentRefs => {
             	return db.getAll(documentRefs);
             }).then(async documentSnapshots => {
+            	var writeStop = [];
             	for (let documentSnapshot of documentSnapshots) {
 			      if(documentSnapshot.get("assigned")=== -1 ){
-			      	if(solution.routes[index]!=[]){
+			      	if(solution.routes[index]!==[]){
 			      		flag = 1;
 			      		break;
 			      	}
-			      	var writeStop = await collectionRef.doc(documentSnapshot.id).update({warehouse:docNew.warehouse,assigned:1,stops:solution.routes[index]});
+			      	writeStop.push(collectionRef.doc(documentSnapshot.id)
+			      								.update({warehouse:docNew.warehouse,assigned:1,stops:solution.routes[index]}));
 			      	index++;
 			      }
 			    }
-			    while(true){
-			    	if(solution.routes[index]!=[]){
-			      		break
+			    while(flag===0){
+			    	if(solution.routes[index]!==[]){
+			      		break;
 			      	}
-			    	var writeStop = await collectionRef.doc(documentSnapshot.id).update({warehouse:docNew.warehouse,assigned:0,stops:solution.routes[index]});
+			    	writeStop.push(collectionRef.doc(documentSnapshot.id)
+			    								.update({warehouse:docNew.warehouse,assigned:0,stops:solution.routes[index]}));
 			      	index++;
 			    }
+			    return Promise.all(writeStop);
             });
-        });      
+        });  
+        return null;    
       }
+    })
+    .catch(error => {
+    	console.log(error);
     }); 
   });
