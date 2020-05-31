@@ -81,7 +81,7 @@ public class AdminMainActivity extends AppCompatActivity {
             public void onClick (View view){
 //            Save the data in wh and whcap to the database
                 // Add data whLat and whLong to the data base
-                final String wh_int= inp_wh.getText().toString();
+                final String wh_int= standardName(inp_wh.getText().toString());
                 final String whcap_int = inp_whcap.getText().toString();
                 final String whLat_int = inp_whLat.getText().toString();
                 final String whLong_int = inp_whLong.getText().toString();
@@ -121,7 +121,7 @@ public class AdminMainActivity extends AppCompatActivity {
                 // Delete data whLat and whLong to the data base
 
                 Log.d(TAG, "Deleting warehouse");
-                final String wh_int= inp_wh.getText().toString();
+                final String wh_int= standardName(inp_wh.getText().toString());
                 final String whcap_int = inp_whcap.getText().toString();
                 if(wh_int.isEmpty()){
                     Toast.makeText(AdminMainActivity.this, "Warehouse name empty", Toast.LENGTH_SHORT).show();
@@ -223,6 +223,16 @@ public class AdminMainActivity extends AppCompatActivity {
 
     }
 
+    public String standardName(String uname){
+        String name = uname.trim();
+        String[] name_words = name.split("\\s+");
+        String name_standard = "";
+        for(int i=0;i<name_words.length-1;i++){
+            name_standard += name_words[i].toUpperCase()+" ";
+        }
+        name_standard += name_words[name_words.length-1].toUpperCase();
+        return name_standard;
+    }
     public void updateItem(String wname, String wcap, String wlat, String wlong, List<DocumentSnapshot> docs){
         for(DocumentSnapshot document : docs){
             DocumentReference docRef = db.collection("warehouse").document(document.getId());
