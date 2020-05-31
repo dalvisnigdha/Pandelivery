@@ -323,10 +323,6 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             mMap.setOnMyLocationButtonClickListener(this);
             mMap.setOnMyLocationClickListener(this);
         }
-
-
-
-
         // Map UI Settings
         mUiSettings = mMap.getUiSettings();
         mUiSettings.setMyLocationButtonEnabled(true);
