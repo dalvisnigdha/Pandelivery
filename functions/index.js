@@ -179,33 +179,119 @@ exports.solveVRP = functions.firestore
 			var setup = setupVRP(stops,documentSnapshot.get("timeHorizon"));
 			var VRP = new ortools.VRP(setup);
 			var vrpSearchOpts = setupSearch(stops,documentSnapshot);
-			VRP.Solve(vrpSearchOpts, async function (err, solution) {
-		    if (err) {
-		      console.log("VRP did not find a solution");
-		      return docRef.update({warehouse:docNew.warehouse,warehouse_cap:docNew.warehouse_cap,
-		      						solveVRP:0,numVehicles:vrpSearchOpts.numVehicles,
-		      						computeTimeLimit:vrpSearchOpts.computeTimeLimit,
-		      						timeHorizon:vrpSearchOpts.timeHorizon,
-		      						vehicleCapacity:vrpSearchOpts.vehicleCapacity});
-		    }
-		    console.log("Solved successfully!");
-		    console.log(solution);
+			VRP.Solve(vrpSearchOpts, function (err, solution) {
+			    if (err) {
+			      console.log("VRP did not find a solution");
+			      return docRef.update({warehouse:docNew.warehouse,warehouse_cap:docNew.warehouse_cap,
+			      						solveVRP:0,numVehicles:vrpSearchOpts.numVehicles,
+			      						computeTimeLimit:vrpSearchOpts.computeTimeLimit,
+			      						timeHorizon:vrpSearchOpts.timeHorizon,
+			      						vehicleCapacity:vrpSearchOpts.vehicleCapacity});
+			    }
+			    console.log("Solved successfully!");
+			    console.log(solution);
+			    var index = 0;
+			    var flag = 0;
+			    var collectionRef = db.collection("users");
+			    return docRef.update({warehouse:docNew.warehouse,warehouse_cap:docNew.warehouse_cap,
+			      						solveVRP:1,numVehicles:vrpSearchOpts.numVehicles,
+			      						computeTimeLimit:vrpSearchOpts.computeTimeLimit,
+			      						timeHorizon:vrpSearchOpts.timeHorizon,
+			      						vehicleCapacity:vrpSearchOpts.vehicleCapacity}).then(res =>{
+			      	console.log("Now allocating routes");
+			      	return collectionRef.listDocuments();						
+				}).then(documentRefs => {			
+					console.log("Retrieving All Documents");
+					return db.getAll(...documentRefs);
+				}).then(documentSnapshots => {
+					console.log("Retrieved All documents");
+			    	var writeStop = [];
+			    	for (let documentSnapshot of documentSnapshots) {
+				      if(documentSnapshot.get("assigned")=== -1 ){
+				      	var assign_route = new Array();
+				      	var k = 0;
+				      	var always_true = 1;
+				      	while(always_true===1){
+				      		if(solution.routes[index][k]===undefined){
+				      			break;
+				      		}
+				      		assign_route[k] = solution.routes[index][k];
+				      	}
+				      	if(assign_route===[]){
+				      		flag = 1;
+				      		break;
+				      	}
+				      	console.log(assign_route+" "+documentSnapshot.id);
+				      	writeStop.push(collectionRef.doc(documentSnapshot.id)
+				      								.update({warehouse:docNew.warehouse,assigned:1,
+				      										stops:assign_route}));
+				      	index++;
+				      }
+				    }
+				    var dummy = 0;
+				    console.log("Index "+index+ " length "+solution.routes.length);
+				    while(index<solution.routes.length){
+				    	console.log("Still some routes left");
+				      	assign_route = new Array();
+				      	k = 0;
+				      	always_true = 1;
+				      	while(always_true===1){
+				      		if(solution.routes[index][k]===undefined){
+				      			break;
+				      		}
+				      		assign_route[k] = solution.routes[index][k];
+				      	}
+				      	if(assign_route===[]){
+				      		console.log("No routes left");
+				      		break;
+				      	}
+				      	console.log(assign_route+" "+dummy);
+				    	writeStop.push(collectionRef.doc("dummy"+dummy)
+				    								.set({warehouse:docNew.warehouse,assigned:0,
+				    									stops:assign_route}));
+				      	index++;
+				      	dummy++;
+				    }
+				    return Promise.all(writeStop);
+				});	    	
+        	});
+		} 
+	}else{
+		console.log("Have not solved before");
+		stops = docNew.stops;
+		stops[stops.length] = docNew.warehouse + "#"  + 
+		                      docNew.warehouse_cap + "#" +
+		                      docNew.warehouse_lat + "#" +
+		                      docNew.warehouse_long;
+
+		setup = setupVRP(stops);
+		VRP = new ortools.VRP(setup);
+		vrpSearchOpts = setupSearch(stops);
+		VRP.Solve(vrpSearchOpts,async function (err, solution) {
+			if (err) {
+				console.log("VRP did not find a solution");
+				return docRef.set({warehouse:docNew.warehouse,warehouse_cap:docNew.warehouse_cap,
+									solveVRP:0,numVehicles:vrpSearchOpts.numVehicles,
+									computeTimeLimit:vrpSearchOpts.computeTimeLimit,
+									timeHorizon:vrpSearchOpts.timeHorizon,vehicleCapacity:vrpSearchOpts.vehicleCapacity});
+			}
+		  	console.log("Solved successfully!");
+		  	console.log(solution);
 		    var index = 0;
 		    var flag = 0;
 		    var collectionRef = db.collection("users");
-		    var writeVRP = await docRef.update({warehouse:docNew.warehouse,warehouse_cap:docNew.warehouse_cap,
+		    return docRef.set({warehouse:docNew.warehouse,warehouse_cap:docNew.warehouse_cap,
 		      						solveVRP:1,numVehicles:vrpSearchOpts.numVehicles,
 		      						computeTimeLimit:vrpSearchOpts.computeTimeLimit,
 		      						timeHorizon:vrpSearchOpts.timeHorizon,
-		      						vehicleCapacity:vrpSearchOpts.vehicleCapacity});
-		    console.log("Now allocating routes");
-		    return collectionRef.listDocuments().then(documentRefs => {
-		    	console.log("Retrieving All Documents");
-          var t = db.getAll(...documentRefs);
-          console.log("TEST 1");
-		    	return t;
-		    }).then(documentSnapshots => {
-		    	console.log("Retrieved All documents");
+		      						vehicleCapacity:vrpSearchOpts.vehicleCapacity}).then(res =>{
+		      	console.log("Now allocating routes");
+		      	return collectionRef.listDocuments();						
+			}).then(documentRefs => {			
+				console.log("Retrieving All Documents");
+				return db.getAll(...documentRefs);
+			}).then(documentSnapshots => {
+				console.log("Retrieved All documents");
 		    	var writeStop = [];
 		    	for (let documentSnapshot of documentSnapshots) {
 			      if(documentSnapshot.get("assigned")=== -1 ){
@@ -254,96 +340,7 @@ exports.solveVRP = functions.firestore
 			      	dummy++;
 			    }
 			    return Promise.all(writeStop);
-		    }, reason => {
-          console.error(reason); // Error!
-        });
-		    });
-		} 
-	}else{
-		console.log("Have not solved before");
-		stops = docNew.stops;
-		stops[stops.length] = docNew.warehouse + "#"  + 
-		                      docNew.warehouse_cap + "#" +
-		                      docNew.warehouse_lat + "#" +
-		                      docNew.warehouse_long;
-
-		setup = setupVRP(stops);
-		VRP = new ortools.VRP(setup);
-		vrpSearchOpts = setupSearch(stops);
-		VRP.Solve(vrpSearchOpts,async function (err, solution) {
-			if (err) {
-				console.log("VRP did not find a solution");
-				return docRef.set({warehouse:docNew.warehouse,warehouse_cap:docNew.warehouse_cap,
-									solveVRP:0,numVehicles:vrpSearchOpts.numVehicles,
-									computeTimeLimit:vrpSearchOpts.computeTimeLimit,
-									timeHorizon:vrpSearchOpts.timeHorizon,vehicleCapacity:vrpSearchOpts.vehicleCapacity});
-			}
-		  	console.log("Solved successfully!");
-		  	console.log(solution);
-		    var index = 0;
-		    var flag = 0;
-		    var collectionRef = db.collection("users");
-		    var writeVRP = await docRef.set({warehouse:docNew.warehouse,warehouse_cap:docNew.warehouse_cap,
-		      						solveVRP:1,numVehicles:vrpSearchOpts.numVehicles,
-		      						computeTimeLimit:vrpSearchOpts.computeTimeLimit,
-		      						timeHorizon:vrpSearchOpts.timeHorizon,
-		      						vehicleCapacity:vrpSearchOpts.vehicleCapacity});
-		    console.log("Now Allocating Routes");
-		    return collectionRef.listDocuments().then(documentRefs => {
-		    	console.log("Retrieving All Documents");
-		    	return db.getAll(...documentRefs);
-		    }).then(documentSnapshots => {
-		    	console.log("Retrieved All documents");
-		    	var writeStop = [];
-		    	for (let documentSnapshot of documentSnapshots) {
-			      if(documentSnapshot.get("assigned")=== -1 ){
-			      	var assign_route = new Array();
-			      	var k = 0;
-			      	var always_true = 1;
-			      	while(always_true===1){
-			      		if(solution.routes[index][k]===undefined){
-			      			break;
-			      		}
-			      		assign_route[k] = solution.routes[index][k];
-			      	}
-			      	if(assign_route===undefined){
-			      		flag = 1;
-			      		break;
-			      	}
-			      	console.log(assign_route+" "+documentSnapshot.id);
-			      	writeStop.push(collectionRef.doc(documentSnapshot.id)
-			      								.update({warehouse:docNew.warehouse,assigned:1,
-			      									stops:assign_route}));
-			      	index++;
-			      }
-			    }
-			    var dummy = 0;
-			    console.log("Index "+index+ " length "+solution.routes.length);
-			    while(index<solution.routes.length){
-			    	console.log("Still some routes left");
-			    	assign_route = new Array();
-			      	k = 0;
-			      	always_true = 1;
-			      	while(always_true===1){
-			      		if(solution.routes[index][k]===undefined){
-			      			break;
-			      		}
-			      		assign_route[k] = solution.routes[index][k];
-			      	}
-			      	if(assign_route===[]){
-			      		flag = 1;
-			      		console.log("No routes left");
-			      		break;
-			      	}
-			      	console.log(assign_route+" "+dummy);
-			    	writeStop.push(collectionRef.doc("dummy"+dummy)
-			    								.set({warehouse:docNew.warehouse,assigned:0,
-			    									stops:assign_route}));
-			      	index++;
-			      	dummy++;
-			    }
-			    return Promise.all(writeStop);
-		    });
+			});
 		});  
 	}
 });
