@@ -69,7 +69,8 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
     boolean working = false;
     Polyline polyline = null;
     ArrayList route;
-    String[] listitems = {"gurgaon","cp","faridabad","indiagate"};//hard coded
+    String[] listitems ;
+//            = {"gurgaon","cp","faridabad","indiagate"};//hard coded
 //    String warehouse = "iit_delhi";
     FirebaseFirestore db;
     FirebaseUser user;
@@ -77,7 +78,6 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
     int warehousecap;
     ArrayList<Integer> maplocationcaplist = new ArrayList<Integer>();
     ArrayList<String> maplocationnamelist = new ArrayList<String>();
-
     ArrayList<RPoint> routeList;
 
     // Locations to be added from Latitude and Longitude added in array list at the bootom
@@ -125,7 +125,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
         // Array list of checkbox
 //            listitems = getResources().getStringArray(R.array.stopslist);
 
-        checkeditems = new boolean[listitems.length];
+
         newtaskbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,7 +134,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                 PolylineOptions polylineOptions = new PolylineOptions().addAll(maplocationList).clickable(true);
                 polyline = mMap.addPolyline(polylineOptions);
                 polyline.setColor(Color.rgb(102,178,255));
-                Log.d("route tag", "route path "+maplocationList);
+
 
                 for (int i = 0; i < maplocationList.size(); i++) {
                     if (i == 0) {
@@ -148,7 +148,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(maplocationList.get(i)));
                 }
 
-                for(int i = 0;i<maplocationnamelist.size();i++)
+                for(int i = 1;i<maplocationnamelist.size();i++)
                 {
 
                     listitems[i-1]= maplocationnamelist.get(i);
@@ -265,6 +265,15 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
 
 //                            mMap.addMarker(new MarkerOptions().position(item.location).title("Name: " + item.name + " | Capacity: " + item.capacity));
                         }
+                        listitems =  new String[]{"gurgaon","cp","faridabad","indiagate"};
+//                        listitems = new String[maplocationnamelist.size()];  ABHAY i need to add this but null point exception coming
+                        for(int i =1;i<maplocationnamelist.size();i++)
+                        {
+                            listitems[i-1] = maplocationnamelist.get(i);
+                        }
+                        checkeditems = new boolean[listitems.length];
+
+                        Log.d("route tag", "route path "+maplocationList);
                     }else{
                         // DO NOTHING
                         Log.d("Firestore Route", "Route not assigned");
