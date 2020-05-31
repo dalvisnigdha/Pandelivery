@@ -48,9 +48,12 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -66,14 +69,20 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
     boolean working = false;
     Polyline polyline = null;
     ArrayList route;
-    String[] listitems = {"gurgaon","cp","faridabad","indiagate"};//hard coded
-    String warehouse = "iit_delhi";
+    String[] listitems ;
+//            = {"gurgaon","cp","faridabad","indiagate"};//hard coded
+//    String warehouse = "iit_delhi";
     FirebaseFirestore db;
     FirebaseUser user;
     FirebaseAuth firebaseAuth;
+    int warehousecap;
+    ArrayList<Integer> maplocationcaplist = new ArrayList<Integer>();
+    ArrayList<String> maplocationnamelist = new ArrayList<String>();
+    ArrayList<RPoint> routeList;
 
     // Locations to be added from Latitude and Longitude added in array list at the bootom
     ArrayList<LatLng> maplocationList = new ArrayList<LatLng>();
+
 
 //    LatLng iit_delhi = new LatLng(28.5450, 77.1926);
 //    LatLng gurgaon = new LatLng(28.4595, 77.0266);
@@ -115,7 +124,8 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
 
         // Array list of checkbox
 //            listitems = getResources().getStringArray(R.array.stopslist);
-        checkeditems = new boolean[listitems.length];
+
+
         newtaskbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,8 +134,25 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                 PolylineOptions polylineOptions = new PolylineOptions().addAll(maplocationList).clickable(true);
                 polyline = mMap.addPolyline(polylineOptions);
                 polyline.setColor(Color.rgb(102,178,255));
-                Log.d("route tag", "route path "+maplocationList);
 
+
+                for (int i = 0; i < maplocationList.size(); i++) {
+                    if (i == 0) {
+                        mMap.addMarker(new MarkerOptions().position(maplocationList.get(i)).title("Warehouse-" + maplocationnamelist.get(i)));
+//                        mMap.addMarker(new MarkerOptions().position(item.location).title("Name: " + item.name + " | Capacity: " + item.capacity));
+                    } else {
+                        mMap.addMarker(new MarkerOptions().position(maplocationList.get(i)).title("Stop " +i+"|"+maplocationnamelist.get(i)+"|"+maplocationcaplist.get(i)));
+                    }
+
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(21));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(maplocationList.get(i)));
+                }
+
+                for(int i = 1;i<maplocationnamelist.size();i++)
+                {
+
+                    listitems[i-1]= maplocationnamelist.get(i);
+                }
             }
         });
 
@@ -134,7 +161,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View view) {
                 if (working) {
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserMainActivity.this);
-                    mBuilder.setTitle("Warehouse-"+warehouse);
+                    mBuilder.setTitle("Warehouse-"+maplocationnamelist.get(0));
                     mBuilder.setMultiChoiceItems(listitems, checkeditems, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
@@ -175,10 +202,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                     });
                     AlertDialog mDialog = mBuilder.create();
                     mDialog.show();
-
-
                 }
-
             }
         });
 
@@ -218,21 +242,41 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                     Map user_data = snapshot.getData();
                     Log.d("Firestore Route", source + " data: " + user_data);
                     if ( ((Long)user_data.get("assigned")).intValue() == 1){
-                        Log.d("Firestore Route", "ASSIGNED");
-                        // SNIGDHA
-                        route = (ArrayList)user_data.get("route");    // Array having routes
-                        GeoPoint pt;       // Access array element
-                        LatLng mappt;// Convert to latlng for display on map
-                        for(int i =0;i<route.size();i++)
-                        {
-                            pt = (GeoPoint)route.get(i);
-                            mappt = new LatLng(pt.getLatitude(),pt.getLongitude());
-                            maplocationList.add(mappt);
-
+                        Log.d("Firestore Route", "Route assigned and fetched");
+                        // Populate routeList
+                        ArrayList stopsList = (ArrayList)user_data.get("stops");
+                        ArrayList routeIndex = (ArrayList)user_data.get("route");
+                        routeList = new ArrayList<RPoint>();
+                        for (Object index : routeIndex){
+                            int ind = ((Long)index).intValue();
+                            String entry = (String)stopsList.get(ind);
+                            String[] vals = entry.split("#");
+                            RPoint obj = new RPoint(vals[0], Integer.parseInt(vals[1]), new LatLng(Double.parseDouble(vals[2]), Double.parseDouble(vals[3])));
+                            routeList.add(obj);
                         }
+                        // User routeList to draw on Map // SNIGDHA if you need to additionally do, add below
+                        for (RPoint item : routeList){
+                            maplocationnamelist.add(item.name);
+                            maplocationcaplist.add(item.capacity);
+                            maplocationList.add(item.location);
+
+//                            mMap.addMarker(new MarkerOptions().position(item.location).title("Name: " + item.name + " | Capacity: " + item.capacity));
+                        }
+//                        listitems =  new String[]{"gurgaon","cp","faridabad","indiagate"};
+                        listitems = new String[maplocationnamelist.size()-1];  // ABHAY i need to add this but null point exception coming
+                        for(int i =1;i<maplocationnamelist.size();i++)
+                        {
+                            listitems[i-1] = maplocationnamelist.get(i);
+                        }
+                        checkeditems = new boolean[listitems.length];
+//                        for (int i=0; i<listitems.length; i++){
+//                            Log.d("Firestore DEBUG", i + " Item: " + listitems[i] + " Check: " + checkeditems[i]);
+//                        }
+                        Log.d("Firestore Route", "listitems: "+listitems.length);
+                        Log.d("route tag", "route path "+maplocationList);
                     }else{
                         // DO NOTHING
-                        Log.d("Firestore Route", "DO NOTHING " + user_data.get("assigned"));
+                        Log.d("Firestore Route", "Route not assigned");
                     }
                 } else {
                     Log.d("Firestore Route", source + " data: null");
@@ -241,6 +285,17 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
         });
     }
 
+    class RPoint {
+        String name;
+        int capacity;
+        LatLng location;
+
+        public RPoint(String nm, int cap, LatLng loc){
+            name = nm;
+            capacity = cap;
+            location = loc;
+        }
+    };
     public void Dialogdone(){
       DonDialog dialogdone = new DonDialog();
       dialogdone.show(getSupportFragmentManager(),"completed dialog");
@@ -261,16 +316,6 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
             mMap.setOnMyLocationClickListener(this);
         }
 
-            for (int i = 0; i < maplocationList.size(); i++) {
-                if (i == 0) {
-                    mMap.addMarker(new MarkerOptions().position(maplocationList.get(i)).title("Warehouse-" + warehouse));
-                } else {
-                    mMap.addMarker(new MarkerOptions().position(maplocationList.get(i)).title("Stop " + i));
-                }
-
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(21));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(maplocationList.get(i)));
-            }
 
 
 
@@ -279,20 +324,8 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
         mUiSettings.setMyLocationButtonEnabled(true);
         mUiSettings.setZoomControlsEnabled(true);
         mUiSettings.setCompassEnabled(true);
-        //        mUiSettings.setScrollGesturesEnabled(true);
         mUiSettings.setZoomGesturesEnabled(true);
-        //        mUiSettings.setTiltGesturesEnabled(true);
         mUiSettings.setRotateGesturesEnabled(true);
-        //        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-        //            @Override
-        //            public boolean onMarkerClick(Marker marker) {
-        ////                int position = (int)(marker.getTag());
-        ////                Toast.makeText(con, ""+marker.getPosition(), Toast.LENGTH_LONG).show();
-        //                return false;
-        //            }
-        //        });
-
-
     }
 
     @Override

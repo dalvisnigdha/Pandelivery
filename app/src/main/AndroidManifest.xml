@@ -32,6 +32,7 @@
             android:parentActivityName=".MainActivity" />
         <activity android:name=".AdminMainActivity" />
         <activity android:name=".UserMainActivity" />
+        <activity android:name=".HelpActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

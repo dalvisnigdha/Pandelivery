@@ -23,12 +23,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.functions.FirebaseFunctions;
+//import com.google.firebase.functions.FirebaseFunctions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,16 +39,15 @@ import java.util.Map;
 public class AdminStopsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Button savestop;
     Button deletestop;
-//    Button backtowh;
     EditText inp_stop;
     EditText inp_stopqty;
     Spinner dropdown;
     EditText inp_stopLat;
     EditText inp_stopLong;
     Button computepath;
+    Button ready;
     int flag = 0;
 
-//    TextView listviewstoptxt;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "AdminStopsActivity";
     private static String warehouse = "";
@@ -60,20 +60,56 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         actionbar.setTitle("Admin");
         savestop = findViewById(R.id.savestop);
         deletestop = findViewById(R.id.deletestop);
-//        listviewstoptxt = findViewById(R.id.listviewwhtxt);
-//        backtowh = findViewById(R.id.backtowh);
         inp_stop = findViewById(R.id.inp_stop);
         inp_stopqty = findViewById(R.id.inp_stopqty);
         dropdown = findViewById(R.id.spinnerwh);
         inp_stopLat = findViewById(R.id.inp_stopLat);
         inp_stopLong = findViewById(R.id.inp_stopLong);
         computepath = findViewById(R.id.computepath);
+        ready = findViewById(R.id.ready);
         dropdown.setOnItemSelectedListener(this);
 
         String stop= inp_stop.getText().toString();
         String stopqty = inp_stopqty.getText().toString();
         final String stopLat = inp_stopLat.getText().toString();
         final String stopLong = inp_stopLong.getText().toString();
+
+
+        ready.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (warehouse.equals("")){
+                    Toast.makeText(AdminStopsActivity.this, "Please select a warehouse", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                DocumentReference dref = db.collection("VRP").document(warehouse);
+                if (dref == null){
+                    Toast.makeText(AdminStopsActivity.this, "Plan not yet ready. Wait for some time!", Toast.LENGTH_LONG).show();
+                    Log.d("Firestore", "Not supposed to happen i guess");
+                    return;
+                }
+                dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            String vrp_status = task.getResult().getString("solveVRP");
+                            Log.d("Firestore", "solveVRP is " + vrp_status);
+                            if (vrp_status.equals("0")){
+                                Toast.makeText(AdminStopsActivity.this, "Plan not found. Try later!", Toast.LENGTH_LONG).show();
+                                Log.d("Firestore VRP", "VRP is 0");
+                            }else if (vrp_status.equals("1")){
+                                Toast.makeText(AdminStopsActivity.this, "Path computed", Toast.LENGTH_LONG).show();
+                                Log.d("Firestore VRP", "VRP is 1");
+                            }
+                        }else{
+                            Toast.makeText(AdminStopsActivity.this, "Plan not yet ready. Wait for some time!", Toast.LENGTH_LONG).show();
+                            Log.d("Firestore", "VRP not found. Plan not ready");
+                        }
+                    }
+                });
+            }
+        });
+
 
         // Add list of warehouses here
         //        String[] items = new String[]{"Choose a warehouse","1","2","3","4"};
@@ -102,15 +138,6 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
         dropdown.setAdapter(adapter);
 
 
-//
-//        listviewstoptxt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick (View view){
-//                Intent I = new Intent(AdminStopsActivity.this, ListViewActivity.class);
-//                startActivity(I);
-//            }
-//
-//        });
         computepath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
@@ -235,6 +262,8 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
             public void onClick(View view) {
                 final String stop_int= inp_stop.getText().toString();
                 final String stopqty_int = inp_stopqty.getText().toString();
+                final String stopLat_int = inp_stopLat.getText().toString();
+                final String stopLong_int = inp_stopLong.getText().toString();
 //            Delete the Latitude and Longitude of stops from database
                 if(warehouse.equals("Choose a warehouse")){
                     Toast.makeText(AdminStopsActivity.this, "Select a warehouse first", Toast.LENGTH_SHORT).show();
@@ -249,7 +278,7 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if(document.getData().containsKey("stops")){
-                                            deleteItem(stop_int,stopqty_int,document);
+                                            deleteItem(stop_int,stopqty_int, document);
                                         }
                                         else{
                                             Toast.makeText(AdminStopsActivity.this, "Stops not present", Toast.LENGTH_SHORT).show();
@@ -258,21 +287,14 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                                     }
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
-                                    Toast.makeText(AdminStopsActivity.this, "Error getting document", Toast.LENGTH_SHORT).show();// snigdha added
+                                    Toast.makeText(AdminStopsActivity.this, "Error getting document", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
             }
         });
 
-//        backtowh.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick (View view){
-////                Intent I = new Intent(AdminStopsActivity.this, AdminMainActivity.class);
-////                startActivity(I);
-//                finish();
-//            }
-//        });
+
 
     }
 
