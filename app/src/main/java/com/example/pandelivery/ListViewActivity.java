@@ -28,6 +28,7 @@ public class ListViewActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("List View");
         final List<String> items = new ArrayList<String>();
+        items.add("List of Warehouses and Stops");
         db.collection("warehouse")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -51,7 +52,7 @@ public class ListViewActivity extends AppCompatActivity {
                         }
                     }
                 });
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_list_view, items);
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_listview, items);
 
         ListView listView = (ListView) findViewById(R.id.list_View);
         listView.setAdapter(adapter);
