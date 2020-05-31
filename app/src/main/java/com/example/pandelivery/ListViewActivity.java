@@ -37,24 +37,25 @@ public class ListViewActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String warehouse_name = (String) document.get("warehouse");
-                                items.add(warehouse_name);
+                                items.add("Warehouse "+warehouse_name);
                                 if(document.getData().containsKey("stops")){
                                     List<String> stops = (ArrayList<String>) document.get("stops");
                                     for(int i=0;i<stops.size();i++){
                                         String[] loc = stops.get(i).split("#");
-                                        items.add("Stop "+"i "+loc[0]);
+                                        items.add("Stop "+String.valueOf(i+1)+" "+loc[0]);
                                     }
                                 }
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
+                            ArrayAdapter adapter = new ArrayAdapter<String>(ListViewActivity.this, R.layout.activity_listview, items);
+                            Log.d(TAG,"Setting Adapter");
+                            ListView listView = (ListView) findViewById(R.id.list_View);
+                            listView.setAdapter(adapter);
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_listview, items);
-
-        ListView listView = (ListView) findViewById(R.id.list_View);
-        listView.setAdapter(adapter);
     }
 }
