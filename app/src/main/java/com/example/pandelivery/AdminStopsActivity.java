@@ -133,7 +133,7 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                                     DocumentReference docRef = db.collection("warehouse").document(document.getId());
                                     Map<String,Object> data = document.getData(); // not used
                                     if(!data.containsKey("runVRP")){
-                                        docRef.update("runVRP", 1)
+                                        docRef.update("runVRP", "1")
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
@@ -150,10 +150,10 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                                                 });
                                     }
                                     else{
-                                        int prevVal = (int) data.get("runVRP");
-                                        int newVal = 0;
-                                        if(prevVal==0){
-                                            newVal = 1;
+                                        String prevVal = (String) data.get("runVRP");
+                                        String newVal = "0";
+                                        if(prevVal.equals(newVal)){
+                                            newVal = "1";
                                         }
                                         docRef.update("runVRP", newVal)
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
