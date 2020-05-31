@@ -254,6 +254,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                             RPoint obj = new RPoint(vals[0], Integer.parseInt(vals[1]), new LatLng(Double.parseDouble(vals[2]), Double.parseDouble(vals[3])));
                             routeList.add(obj);
                         }
+
                         // User routeList to draw on Map // SNIGDHA if you need to additionally do, add below
                         for (RPoint item : routeList){
                             maplocationnamelist.add(item.name);
@@ -262,6 +263,13 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
 
 //                            mMap.addMarker(new MarkerOptions().position(item.location).title("Name: " + item.name + " | Capacity: " + item.capacity));
                         }
+                        // Add Warehouse
+                        maplocationnamelist.add(0, (String)user_data.get("warehouse"));
+                        String wh_info = (String)user_data.get("warehouse_info");
+                        String[] wh_val = wh_info.split("#");
+                        maplocationcaplist.add(0, Integer.parseInt(wh_val[0]));
+                        maplocationList.add(0, new LatLng(Double.parseDouble(wh_val[1]),Double.parseDouble(wh_val[2])));
+
 //                        listitems =  new String[]{"gurgaon","cp","faridabad","indiagate"};
                         listitems = new String[maplocationnamelist.size()-1];  // ABHAY i need to add this but null point exception coming
                         for(int i =1;i<maplocationnamelist.size();i++)
