@@ -108,7 +108,7 @@ function setupSearch(locs,prevParams){
   var nv = 5;
   var th = 24*60;
   var ctl = 60000;
-  var vc = 100;
+  var vc = 15;
   for(var i=0;i<locs.length-1;i++){
     p[i] = locs.length - 1;
   }  
@@ -122,7 +122,7 @@ function setupSearch(locs,prevParams){
     nv = prevParams.get("numVehicles")+5;
     th = prevParams.get("timeHorizon")*10;
     ctl = prevParams.get("computeTimeLimit") + 10000;
-    vc = prevParams.get("vehicleCapacity") + 10;
+    vc = prevParams.get("vehicleCapacity") + 2;
   }
   for(i=0;i<nv;i++){
       rl[i] = [];
@@ -134,8 +134,8 @@ function setupSearch(locs,prevParams){
       timeHorizon: th,
       vehicleCapacity: vc,
       routeLocks: rl,
-      pickups: p,
-      deliveries : d
+      pickups: [],
+      deliveries : []
       };
   console.log(vrpSearchOpts);
   return vrpSearchOpts;
@@ -164,7 +164,8 @@ exports.solveVRP = functions.firestore
     var documentSnapshot = await docRef.get();
 	if(documentSnapshot.exists){
 		console.log("Have solved it before");
-		if(docRef.get("solveVRP")===1){
+		console.log("solveVRP "+documentSnapshot.get("solveVRP"));
+		if(documentSnapshot.get("solveVRP")===1){
 		  console.log("VRP already solved");
 		  return null;
 		}
@@ -211,21 +212,22 @@ exports.solveVRP = functions.firestore
 				      	var assign_route = new Array();
 				      	var k = 0;
 				      	var always_true = 1;
-				      	while(always_true===1){
-				      		if(solution.routes[index][k]===undefined){
-				      			break;
+				      	while(assign_route.length===0 && index<solution.routes.length){
+				      		while(always_true===1){
+					      		if(solution.routes[index][k]===undefined){
+					      			break;
+					      		}
+					      		assign_route[k] = solution.routes[index][k];
+					      		k++;
 				      		}
-				      		assign_route[k] = solution.routes[index][k];
+				      		index++;
 				      	}
-				      	if(assign_route===[]){
-				      		flag = 1;
-				      		break;
-				      	}
-				      	console.log(assign_route+" "+documentSnapshot.id);
-				      	writeStop.push(collectionRef.doc(documentSnapshot.id)
-				      								.update({warehouse:docNew.warehouse,assigned:1,
-				      										stops:assign_route}));
-				      	index++;
+				      	if(assign_route.length>0){
+				      		console.log(assign_route+" "+documentSnapshot.id);
+			      			writeStop.push(collectionRef.doc(documentSnapshot.id)
+			      								.update({warehouse:docNew.warehouse,assigned:1,
+			      										route:assign_route,stops:stops}));
+				      	}				      	
 				      }
 				    }
 				    var dummy = 0;
@@ -235,22 +237,23 @@ exports.solveVRP = functions.firestore
 				      	assign_route = new Array();
 				      	k = 0;
 				      	always_true = 1;
-				      	while(always_true===1){
-				      		if(solution.routes[index][k]===undefined){
-				      			break;
+				      	while(assign_route.length===0 && index<solution.routes.length){
+				      		while(always_true===1){
+					      		if(solution.routes[index][k]===undefined){
+					      			break;
+					      		}
+					      		assign_route[k] = solution.routes[index][k];
+					      		k++;
 				      		}
-				      		assign_route[k] = solution.routes[index][k];
+				      		index++;
 				      	}
-				      	if(assign_route===[]){
-				      		console.log("No routes left");
-				      		break;
-				      	}
-				      	console.log(assign_route+" "+dummy);
-				    	writeStop.push(collectionRef.doc("dummy"+dummy)
+				      	if(assign_route.length>0){
+					      	console.log(assign_route+" "+dummy);
+				    		writeStop.push(collectionRef.doc("dummy"+dummy+"_"+docNew.warehouse)
 				    								.set({warehouse:docNew.warehouse,assigned:0,
-				    									stops:assign_route}));
-				      	index++;
-				      	dummy++;
+				    									route:assign_route,stops:stops}));
+				      		dummy++;
+				      	}
 				    }
 				    return Promise.all(writeStop);
 				});	    	
@@ -298,21 +301,22 @@ exports.solveVRP = functions.firestore
 			      	var assign_route = new Array();
 			      	var k = 0;
 			      	var always_true = 1;
-			      	while(always_true===1){
-			      		if(solution.routes[index][k]===undefined){
-			      			break;
+			      	while(assign_route.length===0 && index<solution.routes.length){
+			      		while(always_true===1){
+				      		if(solution.routes[index][k]===undefined){
+				      			break;
+				      		}
+				      		assign_route[k] = solution.routes[index][k];
+				      		k++;
 			      		}
-			      		assign_route[k] = solution.routes[index][k];
+			      		index++;
 			      	}
-			      	if(assign_route===[]){
-			      		flag = 1;
-			      		break;
+			      	if(assign_route.length>0){
+			      		console.log(assign_route+" "+documentSnapshot.id);
+		      			writeStop.push(collectionRef.doc(documentSnapshot.id)
+		      								.set({warehouse:docNew.warehouse,assigned:1,
+		      										route:assign_route,stops:stops}));
 			      	}
-			      	console.log(assign_route+" "+documentSnapshot.id);
-			      	writeStop.push(collectionRef.doc(documentSnapshot.id)
-			      								.update({warehouse:docNew.warehouse,assigned:1,
-			      										stops:assign_route}));
-			      	index++;
 			      }
 			    }
 			    var dummy = 0;
@@ -322,22 +326,24 @@ exports.solveVRP = functions.firestore
 			      	assign_route = new Array();
 			      	k = 0;
 			      	always_true = 1;
-			      	while(always_true===1){
-			      		if(solution.routes[index][k]===undefined){
-			      			break;
+			      	while(assign_route.length===0 && index<solution.routes.length){
+			      		while(always_true===1){
+				      		if(solution.routes[index][k]===undefined){
+				      			break;
+				      		}
+				      		assign_route[k] = solution.routes[index][k];
+				      		k++;
 			      		}
-			      		assign_route[k] = solution.routes[index][k];
+			      		index++;
 			      	}
-			      	if(assign_route===[]){
-			      		console.log("No routes left");
-			      		break;
+			      	if(assign_route.length>0){
+			      		console.log(assign_route+" "+dummy);
+		      			writeStop.push(collectionRef.doc("dummy"+dummy+"_"+docNew.warehouse)
+		      								.set({warehouse:docNew.warehouse,assigned:0,
+		      										route:assign_route,stops:stops}));
+		      			dummy++;
 			      	}
-			      	console.log(assign_route+" "+dummy);
-			    	writeStop.push(collectionRef.doc("dummy"+dummy)
-			    								.set({warehouse:docNew.warehouse,assigned:0,
-			    									stops:assign_route}));
-			      	index++;
-			      	dummy++;
+			      	
 			    }
 			    return Promise.all(writeStop);
 			});
