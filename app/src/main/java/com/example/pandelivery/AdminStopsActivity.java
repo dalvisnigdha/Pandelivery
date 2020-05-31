@@ -85,7 +85,7 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                 DocumentReference dref = db.collection("VRP").document(warehouse);
                 if (dref == null){
                     Toast.makeText(AdminStopsActivity.this, "Plan not yet ready. Wait for some time!", Toast.LENGTH_LONG).show();
-                    Log.d("Firestore", "VRP not found. Plan not ready");
+                    Log.d("Firestore", "Not supposed to happen i guess");
                     return;
                 }
                 dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -102,7 +102,8 @@ public class AdminStopsActivity extends AppCompatActivity implements AdapterView
                                 Log.d("Firestore VRP", "VRP is 1");
                             }
                         }else{
-                            Log.d("Firestore VRP", "Plan Who Knows");
+                            Toast.makeText(AdminStopsActivity.this, "Plan not yet ready. Wait for some time!", Toast.LENGTH_LONG).show();
+                            Log.d("Firestore", "VRP not found. Plan not ready");
                         }
                     }
                 });

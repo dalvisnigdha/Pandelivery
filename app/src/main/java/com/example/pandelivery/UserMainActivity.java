@@ -202,10 +202,7 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
                     });
                     AlertDialog mDialog = mBuilder.create();
                     mDialog.show();
-
-
                 }
-
             }
         });
 
@@ -265,14 +262,17 @@ public class UserMainActivity extends AppCompatActivity implements OnMapReadyCal
 
 //                            mMap.addMarker(new MarkerOptions().position(item.location).title("Name: " + item.name + " | Capacity: " + item.capacity));
                         }
-                        listitems =  new String[]{"gurgaon","cp","faridabad","indiagate"};
-//                        listitems = new String[maplocationnamelist.size()];  ABHAY i need to add this but null point exception coming
+//                        listitems =  new String[]{"gurgaon","cp","faridabad","indiagate"};
+                        listitems = new String[maplocationnamelist.size()-1];  // ABHAY i need to add this but null point exception coming
                         for(int i =1;i<maplocationnamelist.size();i++)
                         {
                             listitems[i-1] = maplocationnamelist.get(i);
                         }
                         checkeditems = new boolean[listitems.length];
-
+//                        for (int i=0; i<listitems.length; i++){
+//                            Log.d("Firestore DEBUG", i + " Item: " + listitems[i] + " Check: " + checkeditems[i]);
+//                        }
+                        Log.d("Firestore Route", "listitems: "+listitems.length);
                         Log.d("route tag", "route path "+maplocationList);
                     }else{
                         // DO NOTHING
